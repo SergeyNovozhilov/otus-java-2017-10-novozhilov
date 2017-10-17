@@ -1,4 +1,4 @@
-import com.google.common.collect.Ordering;
+//import com.google.common.collect.Ordering;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,10 +13,10 @@ public class Main {
         for (int i = 0; i < MAX_NUMBER; i++) {
             intList.add((int)(Math.random() * MAX_NUMBER + 1));
         }
-        Ordering ordering = Ordering.natural();
+//        Ordering ordering = Ordering.natural();
         System.out.println("Unsorted:");
         System.out.println(intList);
-        Collections.sort(intList, ordering);
+        Collections.sort(intList);
         System.out.println("Sorted:");
         System.out.println(intList);
     }

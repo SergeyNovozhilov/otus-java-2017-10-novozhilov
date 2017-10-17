@@ -16,11 +16,11 @@
     </properties>
 
     <dependencies>
-        <dependency>
+        <!--dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>${guava.version}</version>
-        </dependency>
+        </dependency-->
     </dependencies>
 
     <build>
@@ -60,6 +60,48 @@
                         </manifest>
                     </archive>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.github.wvengen</groupId>
+                <artifactId>proguard-maven-plugin</artifactId>
+                <version>2.0.10</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>proguard</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <obfuscate>true</obfuscate>
+                    <injar>${project.name}.jar</injar>
+                    <outjar>${project.name}-obfuscate.jar</outjar>
+                    <includeDependency>true</includeDependency>
+                    <options>
+                        <option>-keep public class Main { *; }</option>
+                    </options>
+                    <libs>
+                        <lib>${java.home}/lib/rt.jar</lib>
+                        <lib>${java.home}/lib/jce.jar</lib>
+                    </libs>
+                    <archive>
+                        <manifest>
+                            <mainClass>Main</mainClass>
+                        </manifest>
+                    </archive>
+
+                </configuration>
+                <dependencies>
+
+                    <dependency>
+                        <groupId>net.sf.proguard</groupId>
+                        <artifactId>proguard-base</artifactId>
+                        <version>5.1</version>
+                        <scope>runtime</scope>
+                    </dependency>
+
+                </dependencies>
             </plugin>
          </plugins>
     </build>
