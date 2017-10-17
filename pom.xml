@@ -16,11 +16,17 @@
     </properties>
 
     <dependencies>
-        <!--dependency>
+        <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>${guava.version}</version>
-        </dependency-->
+        </dependency>
+        <dependency>
+            <groupId>net.sf.proguard</groupId>
+            <artifactId>proguard-base</artifactId>
+            <version>5.1</version>
+            <scope>runtime</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -80,6 +86,7 @@
                     <includeDependency>true</includeDependency>
                     <options>
                         <option>-keep public class Main { *; }</option>
+                        <option>-ignorewarnings</option>
                     </options>
                     <libs>
                         <lib>${java.home}/lib/rt.jar</lib>
@@ -92,16 +99,6 @@
                     </archive>
 
                 </configuration>
-                <dependencies>
-
-                    <dependency>
-                        <groupId>net.sf.proguard</groupId>
-                        <artifactId>proguard-base</artifactId>
-                        <version>5.1</version>
-                        <scope>runtime</scope>
-                    </dependency>
-
-                </dependencies>
             </plugin>
          </plugins>
     </build>
