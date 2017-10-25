@@ -1,0 +1,5 @@
+Main
+Main: int MAX_NUMBER
+Main: Main()
+Main: void main(java.lang.String[])
+Main: void <clinit>()
