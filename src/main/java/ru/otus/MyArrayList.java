@@ -14,12 +14,15 @@ public class MyArrayList<T> implements List<T> {
         this.capacity = INITIAL;
     }
 
-    public MyArrayList(int initSize) {
-        if (initSize < 0) {
-            initSize = INITIAL;
+    public MyArrayList(int init) {
+        if (init < 0) {
+            throw new IllegalArgumentException("Illegal Capacity: " + init);
         }
-        this.array = new Object[initSize];
-        this.capacity = INITIAL;
+        if (init == 0) {
+            init = INITIAL;
+        }
+        this.array = new Object[init];
+        this.capacity = init;
     }
 
 
@@ -52,7 +55,7 @@ public class MyArrayList<T> implements List<T> {
 
     @Override
     public boolean add(T o) {
-        if (this.array.length >= this.capacity) {
+        if (this.size >= this.capacity) {
             increaseArray();
         }
         this.array[this.size++] = o;
@@ -63,25 +66,20 @@ public class MyArrayList<T> implements List<T> {
     @Override
     public boolean remove(Object o) {
         int index = indexOf(o);
-        if (index != -1) {
-            if (index != this.size - 1) {
-                System.arraycopy(this.array, index, this.array, index - 1, this.array.length - index);
-            }
-            this.array[--this.size] = null;
-            if (this.size < this.capacity) {
-                this.capacity /= 2;
-                Object[] arr = new Object[this.capacity];
-                System.arraycopy(this.array, 0, arr, 0, this.array.length);
-                this.array = arr;
-            }
-            return true;
+        if (index == -1) {
+            return false;
         }
-        return false;
+        remove(index);
+        return true;
     }
 
     @Override
     public boolean addAll(Collection c) {
-        return addAll(this.array.length, c);
+        int index = 0;
+        if (this.size > 0) {
+            index = this.size - 1;
+        }
+        return addAll(index, c);
     }
 
     @Override
@@ -92,14 +90,22 @@ public class MyArrayList<T> implements List<T> {
         if (!isInRange(index)) {
             throw new IndexOutOfBoundsException();
         }
-        int left = this.capacity - index;
-        Object[] arr = new Object[left];
-        System.arraycopy(this.array, index, arr, 0, left);
-        while (this.array.length + c.size() > this.capacity) {
+        while (this.size + c.size() > this.capacity) {
             increaseArray();
         }
-        System.arraycopy(c.toArray(), 0, this.array, index, c.size());
-        System.arraycopy(arr, 0, this.array, index + 1, left);
+
+        if (this.size > 0) {
+            int left = this.size - index;
+            Object[] arr = new Object[left];
+            System.arraycopy(this.array, index, arr, 0, left);
+
+            System.arraycopy(c.toArray(), 0, this.array, index, c.size());
+            System.arraycopy(arr, 0, this.array, index + c.size(), left);
+            this.size += c.size();
+        } else {
+            System.arraycopy(c.toArray(), 0, this.array, index, c.size());
+            this.size = c.size();
+        }
         return true;
     }
 
@@ -111,9 +117,9 @@ public class MyArrayList<T> implements List<T> {
     @Override
     public void sort(Comparator c) {
         Object[] a = this.toArray();
-        Arrays.sort(a, (Comparator)c);
+        Arrays.sort(a, (Comparator) c);
         ListIterator i = this.listIterator();
-        for (int j=0; j<a.length; j++) {
+        for (int j = 0; j < a.length; j++) {
             i.next();
             i.set(a[j]);
         }
@@ -138,8 +144,9 @@ public class MyArrayList<T> implements List<T> {
         if (!isInRange(index)) {
             throw new IndexOutOfBoundsException();
         }
+        Object object = this.array[index];
         this.array[index] = element;
-        return element;
+        return (T)object;
     }
 
     @Override
@@ -154,14 +161,11 @@ public class MyArrayList<T> implements List<T> {
             throw new IndexOutOfBoundsException();
         }
         Object returnElement = this.array[index];
-        if (index != this.size - 1) {
-            System.arraycopy(this.array, index, this.array, index - 1, this.array.length - index);
-        }
-        this.array[--this.size] = null;
-        if (this.size < this.capacity) {
+        System.arraycopy(this.array, index + 1, this.array, index, this.array.length - index - 1);
+        if (--this.size < this.capacity / 2) {
             this.capacity /= 2;
             Object[] arr = new Object[this.capacity];
-            System.arraycopy(this.array, 0, arr, 0, this.array.length);
+            System.arraycopy(this.array, 0, arr, 0, this.size);
             this.array = arr;
         }
         return (T) returnElement;
@@ -270,8 +274,8 @@ public class MyArrayList<T> implements List<T> {
         }
 
         public T next() {
-            if(this.hasNext()) {
-                return (T)MyArrayList.this.array[this.cursor++];
+            if (this.hasNext()) {
+                return (T) MyArrayList.this.array[this.cursor++];
             }
             throw new NoSuchElementException();
         }
@@ -296,7 +300,7 @@ public class MyArrayList<T> implements List<T> {
         public T previous() {
             if (!hasPrevious())
                 throw new NoSuchElementException();
-            return (T)MyArrayList.this.array[--cursor];
+            return (T) MyArrayList.this.array[--cursor];
         }
 
         @Override
