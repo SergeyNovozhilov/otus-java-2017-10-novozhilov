@@ -4,9 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <name>SNHW03</name>
+    <name>SNHW04</name>
     <groupId>ru.otus</groupId>
-    <artifactId>HW03.1.1</artifactId>
+    <artifactId>HW04.1.1</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
@@ -20,6 +20,19 @@
             <artifactId>lombok</artifactId>
             <version>1.16.16</version>
         </dependency>
+        <!--dependency>
+            <groupId>com.mgmtp.gcviewer</groupId>
+            <artifactId>gcviewer</artifactId>
+            <version>1.32-rc-1</version>
+        </dependency-->
+        <!-- https://mvnrepository.com/artifact/com.github.chewiebug/gcviewer -->
+        <dependency>
+            <groupId>com.github.chewiebug</groupId>
+            <artifactId>gcviewer</artifactId>
+            <version>1.32</version>
+        </dependency>
+
+
     </dependencies>
 
     <build>
