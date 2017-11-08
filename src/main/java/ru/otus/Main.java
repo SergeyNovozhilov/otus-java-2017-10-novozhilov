@@ -26,9 +26,13 @@ public class Main {
             }
         } catch (OutOfMemoryError ex) {
             GCViewer viewer = gca.execute();
-            GcStatistics stat = viewer.getGcStatistics();
-            System.out.println("fullGC: count " + stat.getFullGCCount() + " average time " + stat.getFullGCAvgTime());
-            System.out.println("minorGC: count " + stat.getMinorGCCount() + " average time " + stat.getMinorGCAvgTime());
+            if (viewer != null) {
+                GcStatistics stat = viewer.getGcStatistics();
+                System.out.println("fullGC: count " + stat.getFullGCCount() + " average time " + stat.getFullGCAvgTime());
+                System.out.println("minorGC: count " + stat.getMinorGCCount() + " average time " + stat.getMinorGCAvgTime());
+            } else {
+                System.out.println("No data");
+            }
         }
     }
 }

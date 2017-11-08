@@ -30,7 +30,8 @@ public class GCLogAnalyzer {
                 WebResource webResource = client.resource(REQUEST);
                 ClientResponse response = webResource.type("application/json").post(ClientResponse.class, string);
                 if (response.getStatus() != 200) {
-                    throw new RuntimeException("Failed : HTTP error code : " + response.getStatus());
+                    System.out.println("Failed : HTTP error code : " + response.getStatus());
+                    return null;
                 }
 
                 System.out.println("Server response " + response.getStatus());
