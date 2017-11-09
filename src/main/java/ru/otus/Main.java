@@ -3,11 +3,13 @@ package ru.otus;
 import ru.otus.GCLogAnalyzer.GcLogAnalyzer;
 import ru.otus.GCLogAnalyzer.GcViewer;
 
+import java.io.File;
 import java.util.*;
 import ru.otus.GCLogAnalyzer.GcStatistics;
 
 /*
 *  -Xloggc:./logs/gc_pid_%p.log
+*   folder /logs must be created before run
 */
 
 public class Main {

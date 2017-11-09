@@ -22,11 +22,7 @@ public class GcLogAnalyzer {
     public GcViewer execute() {
         String pid = ManagementFactory.getRuntimeMXBean().getName().split("@")[0];
         System.out.println("pid: " + pid);
-        File dir = new File("./logs");
-        if (!dir.exists()) {
-            System.out.println("./logs doesn't exist. Creating");
-            dir.mkdir();
-        }
+
         File file = new File(String.format(LOG_FILE_NAME_FORMAT, pid));
         if (file.exists()) {
             try {
