@@ -1,18 +1,21 @@
 package ru.otus;
 
-import ru.otus.GCLogAnalyzer.GCLogAnalyzer;
-import ru.otus.GCLogAnalyzer.GCViewer;
+import ru.otus.GCLogAnalyzer.GcLogAnalyzer;
+import ru.otus.GCLogAnalyzer.GcViewer;
 
 import java.util.*;
 import ru.otus.GCLogAnalyzer.GcStatistics;
 
+/*
+*  -Xloggc:./logs/gc_pid_%p.log
+*/
 
 public class Main {
-    public static int SIZE = 1_000_000;
+    public static int SIZE = 100_000;
 
     public static void main(String[] args) {
 
-        GCLogAnalyzer gca = new GCLogAnalyzer();
+        GcLogAnalyzer gca = new GcLogAnalyzer();
 
         try {
             List<String> list = new ArrayList<>();
@@ -20,12 +23,13 @@ public class Main {
                 for (int i = 0; i < SIZE; i++) {
                     list.add(UUID.randomUUID().toString());
                 }
-                for (int i = 0; i < SIZE / 2; i++) {
+                for (int i = 0; i < SIZE / 2 ; i++) {
                     list.set(i, null);
                 }
+                Thread.sleep(3000);
             }
         } catch (OutOfMemoryError ex) {
-            GCViewer viewer = gca.execute();
+            GcViewer viewer = gca.execute();
             if (viewer != null) {
                 GcStatistics stat = viewer.getGcStatistics();
                 System.out.println("fullGC: count " + stat.getFullGCCount() + " average time " + stat.getFullGCAvgTime());
@@ -33,6 +37,8 @@ public class Main {
             } else {
                 System.out.println("No data");
             }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 }

@@ -10,18 +10,23 @@ import org.apache.commons.io.FileUtils;
 import java.io.File;
 import java.lang.management.ManagementFactory;
 
-public class GCLogAnalyzer {
+public class GcLogAnalyzer {
 
     private static final String REQUEST = "http://api.gceasy.io/analyzeGC?apiKey=b98e81c8-128b-4524-84bd-3bb3929392a8";
 
     private static final String LOG_FILE_NAME_FORMAT = "./logs/gc_pid_pid%s.log.0.current";
 
     @Getter
-    private GCViewer viewer;
+    private GcViewer viewer;
 
-    public GCViewer execute() {
+    public GcViewer execute() {
         String pid = ManagementFactory.getRuntimeMXBean().getName().split("@")[0];
         System.out.println("pid: " + pid);
+        File dir = new File("./logs");
+        if (!dir.exists()) {
+            System.out.println("./logs doesn't exist. Creating");
+            dir.mkdir();
+        }
         File file = new File(String.format(LOG_FILE_NAME_FORMAT, pid));
         if (file.exists()) {
             try {
@@ -36,7 +41,7 @@ public class GCLogAnalyzer {
 
                 System.out.println("Server response " + response.getStatus());
                 String output = response.getEntity(String.class);
-                GCViewer viewer = new Gson().fromJson(output, GCViewer.class);
+                GcViewer viewer = new Gson().fromJson(output, GcViewer.class);
 
                 return viewer;
             } catch (Exception e) {

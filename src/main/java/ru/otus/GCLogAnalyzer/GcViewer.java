@@ -3,7 +3,7 @@ package ru.otus.GCLogAnalyzer;
 import lombok.Data;
 
 @Data
-public class GCViewer {
+public class GcViewer {
     private String commandLineFlags;
 
     private GcDurationSummary gcDurationSummary;
