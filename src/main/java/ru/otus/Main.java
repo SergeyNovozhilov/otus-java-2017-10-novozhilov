@@ -1,61 +1,81 @@
 package ru.otus;
 
+import ru.otus.annotations.After;
+import ru.otus.annotations.Before;
+import ru.otus.annotations.Test;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
+
 
 public class Main {
     public static void main(String[] args) {
+        Class<TestClass> testClass = TestClass.class;
 
-        System.out.println("----------- Test of addAll -------------------- ");
-
-        List<String> lst = new MyArrayList<>();
-
-        Collections.addAll(lst, "Fisrt", "Second", "Third");
-
-        System.out.println("Value of list: ");
-        lst.forEach(l -> System.out.println(l));
-
-        System.out.println("----------- Test of copy -------------------- ");
-
-        List<String> srclst = new MyArrayList<>(5);
-        List<String> destlst = new MyArrayList<>(10);
-
-        srclst.add("Java");
-        srclst.add("is");
-        srclst.add("best");
-
-        destlst.add("C++");
-        destlst.add("is");
-        destlst.add("older");
+        List<Method> befores = new ArrayList<>();
+        List<Method> tests = new ArrayList<>();
+        List<Method> afters = new ArrayList<>();
 
 
-        Collections.copy(destlst, srclst);
+        System.out.println("length: " + testClass.getDeclaredMethods().length);
 
-        System.out.println("Value of source list: ");
-        srclst.forEach(s -> System.out.println(s));
-        System.out.println("Value of destination list: ");
-        destlst.forEach(d -> System.out.println(d));
+        for (Method method : testClass.getDeclaredMethods()) {
+            if (method.isAnnotationPresent(Before.class)) {
+                System.out.println("Before");
+                befores.add(method);
+                continue;
+            }
 
-        System.out.println("----------- Test of sort -------------------- ");
+            if (method.isAnnotationPresent(Test.class)) {
+                System.out.println("Test");
+                tests.add(method);
+                continue;
+            }
 
-        List<String> fruits = new MyArrayList<>();
+            if (method.isAnnotationPresent(After.class)) {
+                System.out.println("After");
+                afters.add(method);
+            }
+        }
 
-        fruits.add("Banana");
-        fruits.add("Lemon");
-        fruits.add("Apple");
-        fruits.add("Pineapple");
-
-        Collections.sort(fruits);
-        System.out.println("Value of list in natural order: ");
-        fruits.forEach(f -> System.out.println(f));
-
-        Collections.sort(fruits, Collections.reverseOrder());
-        System.out.println("Value of list in reverse order: ");
-        fruits.forEach(f -> System.out.println(f));
-
-
+        tests.forEach(t -> {
+            TestClass test = null;
+            try {
+                test = testClass.newInstance();
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+            TestClass finalTest = test;
+            befores.forEach(b -> {
+                try {
+                    b.invoke(finalTest);
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (InvocationTargetException e) {
+                    e.printStackTrace();
+                }
+            });
+            try {
+                t.invoke(test);
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            }
+            TestClass finalTest1 = test;
+            afters.forEach(a -> {
+                try {
+                    a.invoke(finalTest1);
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (InvocationTargetException e) {
+                    e.printStackTrace();
+                }
+            });
+        });
     }
 }
