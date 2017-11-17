@@ -1,13 +1,22 @@
 package ru.otus;
 
+import com.google.common.reflect.ClassPath;
+import org.reflections.Reflections;
+import org.reflections.scanners.ResourcesScanner;
+import org.reflections.scanners.SubTypesScanner;
+import org.reflections.util.ClasspathHelper;
+import org.reflections.util.ConfigurationBuilder;
 import ru.otus.annotations.After;
 import ru.otus.annotations.Before;
 import ru.otus.annotations.Test;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.*;
 
 
 public class Main {
@@ -19,23 +28,77 @@ public class Main {
         List<Method> afters = new ArrayList<>();
 
 
-        System.out.println("length: " + testClass.getDeclaredMethods().length);
+//        Reflections reflections = new Reflections("ru.otus");
+//
+//        Set<Class<? extends  Object>> allClasses =
+//                reflections.getSubTypesOf(Object.class);
+//
+//        if (allClasses != null) {
+//            System.out.println("size: " + allClasses.size());
+//            allClasses.forEach(c -> {
+//                System.out.println("---");
+//                System.out.println(c.getCanonicalName());
+//            });
+//        } else {
+//            System.out.println("null");
+//        }
+
+
+        List<ClassLoader> classLoadersList = new LinkedList<ClassLoader>();
+        classLoadersList.add(ClasspathHelper.contextClassLoader());
+//        classLoadersList.add(ClasspathHelper.staticClassLoader());
+        Reflections reflections = new Reflections(new ConfigurationBuilder()
+                .setScanners(new SubTypesScanner(false), new ResourcesScanner())
+                .setUrls(ClasspathHelper.forClassLoader(classLoadersList.toArray(new ClassLoader[0]))));
+        Set<Class<? extends Object>> allClasses =
+                reflections.getSubTypesOf(Object.class);
+
+
+        if (allClasses != null) {
+            System.out.println("size: " + allClasses.size());
+            allClasses.forEach(c -> {
+                try {
+                    if (c == null || c.getPackage() == null || c.getPackage().getName() == null) {
+                        return;
+                    }
+                    if (c.getPackage().getName().equals("ru.otus")) {
+                        System.out.println(c.getName());
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+        } else {
+            System.out.println("null");
+        }
+
+        ClassPath path = null;
+        try {
+            path = ClassPath.from(Thread.currentThread().getContextClassLoader());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        List<ClassPath.ClassInfo> clazzInPackage =
+                new ArrayList<ClassPath.ClassInfo>(path.getTopLevelClasses("ru.otus"));
+
+
+        clazzInPackage.forEach(c -> {
+            System.out.println("-> " + c.getName());
+        });
+
 
         for (Method method : testClass.getDeclaredMethods()) {
             if (method.isAnnotationPresent(Before.class)) {
-                System.out.println("Before");
                 befores.add(method);
                 continue;
             }
 
             if (method.isAnnotationPresent(Test.class)) {
-                System.out.println("Test");
                 tests.add(method);
                 continue;
             }
 
             if (method.isAnnotationPresent(After.class)) {
-                System.out.println("After");
                 afters.add(method);
             }
         }
