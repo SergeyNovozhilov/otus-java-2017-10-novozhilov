@@ -6,10 +6,6 @@ public class ObjectClass {
     public ObjectClass() {
     }
 
-    public ObjectClass(String field) {
-        this.field = field;
-    }
-
     public String getField() {
         return field;
     }
