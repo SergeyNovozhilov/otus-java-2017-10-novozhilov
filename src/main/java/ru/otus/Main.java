@@ -1,12 +1,12 @@
 package ru.otus;
 
-import ru.otus.ATM.Banknote;
 
+import ru.otus.BanknoteImpl.Roubles;
 
 public class Main {
     public static void main(String[] args) {
 
-        Banknote v = Banknote.fromValue(10);
+        Roubles v = Roubles.fromValue(10);
 
     }
 }

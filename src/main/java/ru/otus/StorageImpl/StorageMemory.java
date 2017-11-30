@@ -1,6 +1,6 @@
 package ru.otus.StorageImpl;
 
-import ru.otus.ATM.Banknote;
+import ru.otus.Banknote.Banknote;
 import ru.otus.Storage.Storage;
 
 import java.util.ArrayList;
@@ -24,6 +24,11 @@ public class StorageMemory implements Storage{
             moneys.put(b.value(), list);
         }
         list.add(b);
+    }
+
+    @Override
+    public void put(List<Banknote> list) {
+        list.forEach(b -> put(b));
     }
 
     @Override
