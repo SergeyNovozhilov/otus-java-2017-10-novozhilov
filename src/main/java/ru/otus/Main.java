@@ -1,12 +1,12 @@
 package ru.otus;
 
-import ru.otus.Tester.Tester;
+import ru.otus.ATM.Banknote;
 
 
 public class Main {
     public static void main(String[] args) {
 
-        Tester.run("ru.otus");
+        Banknote v = Banknote.fromValue(10);
 
     }
 }

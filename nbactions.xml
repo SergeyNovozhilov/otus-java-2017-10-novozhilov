@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+        <action>
+            <actionName>run</actionName>
+            <packagings>
+                <packaging>jar</packaging>
+            </packagings>
+            <goals>
+                <goal>process-classes</goal>
+                <goal>org.codehaus.mojo:exec-maven-plugin:1.2.1:exec</goal>
+            </goals>
+            <properties>
+                <exec.args>-Xms512m  -Xmx512m  -XX:MaxMetaspaceSize=256m  -XX:+UseG1GC  -XX:+CMSParallelRemarkEnabled  -XX:+UseCMSInitiatingOccupancyOnly  -XX:CMSInitiatingOccupancyFraction=70  -XX:+ScavengeBeforeFullGC  -XX:+CMSScavengeBeforeRemark   -verbose:gc  -Xloggc:./logs/gc_pid_%p.log  -XX:+PrintGCDateStamps  -XX:+PrintGCDetails  -XX:+UseGCLogFileRotation  -XX:NumberOfGCLogFiles=10  -XX:GCLogFileSize=1M  -Dcom.sun.management.jmxremote.port=15000  -Dcom.sun.management.jmxremote.authenticate=false  -Dcom.sun.management.jmxremote.ssl=false  -XX:+HeapDumpOnOutOfMemoryError  -XX:HeapDumpPath=./dumps/ -classpath %classpath ru.otus.Main</exec.args>
+                <exec.executable>java</exec.executable>
+            </properties>
+        </action>
+        <action>
+            <actionName>debug</actionName>
+            <packagings>
+                <packaging>jar</packaging>
+            </packagings>
+            <goals>
+                <goal>process-classes</goal>
+                <goal>org.codehaus.mojo:exec-maven-plugin:1.2.1:exec</goal>
+            </goals>
+            <properties>
+                <exec.args>-Xdebug -Xrunjdwp:transport=dt_socket,server=n,address=${jpda.address} -Xms512m  -Xmx512m  -XX:MaxMetaspaceSize=256m  -XX:+UseG1GC  -XX:+CMSParallelRemarkEnabled  -XX:+UseCMSInitiatingOccupancyOnly  -XX:CMSInitiatingOccupancyFraction=70  -XX:+ScavengeBeforeFullGC  -XX:+CMSScavengeBeforeRemark   -verbose:gc  -Xloggc:./logs/gc_pid_%p.log  -XX:+PrintGCDateStamps  -XX:+PrintGCDetails  -XX:+UseGCLogFileRotation  -XX:NumberOfGCLogFiles=10  -XX:GCLogFileSize=1M  -Dcom.sun.management.jmxremote.port=15000  -Dcom.sun.management.jmxremote.authenticate=false  -Dcom.sun.management.jmxremote.ssl=false  -XX:+HeapDumpOnOutOfMemoryError  -XX:HeapDumpPath=./dumps/ -classpath %classpath ru.otus.Main</exec.args>
+                <exec.executable>java</exec.executable>
+                <jpda.listen>true</jpda.listen>
+            </properties>
+        </action>
+        <action>
+            <actionName>profile</actionName>
+            <packagings>
+                <packaging>jar</packaging>
+            </packagings>
+            <goals>
+                <goal>process-classes</goal>
+                <goal>org.codehaus.mojo:exec-maven-plugin:1.2.1:exec</goal>
+            </goals>
+            <properties>
+                <exec.args>-Xms512m  -Xmx512m  -XX:MaxMetaspaceSize=256m  -XX:+UseG1GC  -XX:+CMSParallelRemarkEnabled  -XX:+UseCMSInitiatingOccupancyOnly  -XX:CMSInitiatingOccupancyFraction=70  -XX:+ScavengeBeforeFullGC  -XX:+CMSScavengeBeforeRemark   -verbose:gc  -Xloggc:./logs/gc_pid_%p.log  -XX:+PrintGCDateStamps  -XX:+PrintGCDetails  -XX:+UseGCLogFileRotation  -XX:NumberOfGCLogFiles=10  -XX:GCLogFileSize=1M  -Dcom.sun.management.jmxremote.port=15000  -Dcom.sun.management.jmxremote.authenticate=false  -Dcom.sun.management.jmxremote.ssl=false  -XX:+HeapDumpOnOutOfMemoryError  -XX:HeapDumpPath=./dumps/ -classpath %classpath ru.otus.Main</exec.args>
+                <exec.executable>java</exec.executable>
+            </properties>
+        </action>
+    </actions>
