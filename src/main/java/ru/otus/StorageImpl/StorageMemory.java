@@ -4,18 +4,16 @@ import ru.otus.AtmImpl.AtmException;
 import ru.otus.Banknote.Banknote;
 import ru.otus.Storage.Storage;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class StorageMemory implements Storage {
 
-    private final Map<Integer, List<Banknote>> moneys;
+    private Map<Integer, List<Banknote>> moneys;
 
     public StorageMemory() {
-        moneys = new HashMap<>();
+        init();
     }
+
 
     @Override
     public void put(Banknote b) {
@@ -28,19 +26,8 @@ public class StorageMemory implements Storage {
     }
 
     @Override
-    public void put(List<Banknote> list) {
-        list.forEach(b -> put(b));
-    }
-
-
-    @Override
-    public int getBalance() {
-        if (moneys.isEmpty()) {
-            return 0;
-        }
-        int sum = 0;
-        moneys.entrySet().stream().map((entry) -> entry.getKey() * entry.getValue().size()).reduce(sum, Integer::sum);
-        return sum;
+    public void put(List list) {
+        list.forEach(b -> put((Banknote) b));
     }
 
 
@@ -53,7 +40,7 @@ public class StorageMemory implements Storage {
     @Override
     public List<Banknote> get(int value, int amount) throws AtmException {
         if (moneys.get(value).size() < amount) {
-            throw new AtmException(String.format("Not enough banknotes of ", value));
+            throw new AtmException(String.format("Not enough banknotes of %d", value));
         }
         List<Banknote> values = moneys.get(value);
         List<Banknote> list = new ArrayList<>();
@@ -65,7 +52,21 @@ public class StorageMemory implements Storage {
 
     @Override
     public List<Banknote> getAll() {
-        return new ArrayList(moneys.values());
+        List<Banknote> list = new ArrayList<>();
+        moneys.values().stream().forEach(l -> list.addAll(l));
+        init();
+        return list;
+    }
+
+    @Override
+    public List<Integer> range() {
+        List<Integer> list = new ArrayList<>(moneys.keySet());
+        Collections.sort(list, Collections.reverseOrder());
+        return list;
+    }
+
+    private void init() {
+        moneys = new HashMap<>();
     }
 
 }

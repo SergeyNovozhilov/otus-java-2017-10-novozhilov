@@ -11,11 +11,11 @@ public interface Storage {
 
     void put(List<Banknote> list);
 
-    int getBalance();
-
     int getAmount(int value);
 
     List<Banknote> get(int value, int amount) throws AtmException;
 
     List<Banknote> getAll();
+
+    List<Integer> range();
 }

@@ -28,37 +28,42 @@ public class AtmImpl implements Atm {
     }
 
     @Override
-    public List<Banknote> get(int sum) throws AtmException {
+    public List<Banknote> withdraw(int sum) throws AtmException {
         if (sum > balance()) {
-            throw new AtmException(String.format("Sum %s exceeds the ATM balance", sum));
+            System.err.format("Sum %s exceeds the ATM balance", sum);
+            return new ArrayList<>();
         }
-        if (sum == storage.getBalance()) {
+        if (sum == balance()) {
             return storage.getAll();
         }
 
-        List<Integer> range = Roubles.range();
+        List<Integer> range = storage.range();
 
         if (sum % range.get(range.size() - 1) > 0) {
-            throw new AtmException(String.format("Cannot collect ", sum));
+            System.err.format("Cannot collect %d", sum);
+            return new ArrayList<>();
         }
 
         List<Banknote> list = new ArrayList<>();
-        int returnSum = 0;
 
         for (int i = 0; i < range.size(); i++) {
             int amount = sum / range.get(i);
             if (amount == 0) {
                 continue;
             }
+            if (amount > storage.getAmount(range.get(i))) {
+                amount = storage.getAmount(range.get(i));
+            }
             list.addAll(storage.get(range.get(i), amount));
-            returnSum += amount * range.get(i);
-            if (returnSum == sum) {
+            sum -= amount * range.get(i);
+            if (sum == 0) {
                 break;
             }
         }
 
-        if (sum > returnSum) {
-            throw new AtmException(String.format("Cannot collect ", sum));
+        if (sum > 0) {
+            System.err.format("Cannot collect %d", sum);
+            return new ArrayList<>();
         }
 
         return list;
@@ -66,6 +71,10 @@ public class AtmImpl implements Atm {
 
     @Override
     public int balance() {
-        return storage.getBalance();
+        int sum = 0;
+        for( int i : storage.range()) {
+            sum += storage.getAmount(i) * i;
+        }
+        return sum;
     }
 }

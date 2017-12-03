@@ -16,12 +16,13 @@ public enum Roubles implements Banknote{
         this.value = value;
     }
 
+    @Override
     public int value() {
         return value;
     }
 
     public static Roubles fromValue(int value) {
-        for (Roubles r : Roubles.values()) {
+        for (Roubles r : values()) {
             if (r.value == value) {
                 return r;
             }
@@ -30,7 +31,7 @@ public enum Roubles implements Banknote{
     }
 
     public static List<Integer> range() {
-        List<Integer> list = Arrays.asList(Roubles.values()).stream().map(Roubles::value).collect(Collectors.toList());
+        List<Integer> list = Arrays.asList(values()).stream().map(Roubles::value).collect(Collectors.toList());
         Collections.reverse(list);
         return list;
     }
