@@ -24,7 +24,7 @@ public class ReflectionHelper {
         return null;
     }
 
-    static Object callMethod(Object object, Method method, Class... args) throws Exception{
+    static Object callMethod(Object object, Method method, Object... args) throws Exception {
         boolean isAccessible = true;
         try {
             isAccessible = method.isAccessible();
@@ -36,8 +36,22 @@ public class ReflectionHelper {
 
         } catch (Exception e) {
             throw e;
+        } finally {
+            if (method != null) {
+                method.setAccessible(isAccessible);
+            }
         }
-        finally {
+    }
+
+    static Object callMethod(Object object, Method method) throws Exception {
+        boolean isAccessible = true;
+        try {
+            isAccessible = method.isAccessible();
+            method.setAccessible(true);
+            return method.invoke(object);
+        } catch (Exception e) {
+            throw e;
+        } finally {
             if (method != null) {
                 method.setAccessible(isAccessible);
             }
