@@ -20,7 +20,7 @@ public class AtmImplTest {
 
     @Before
     public void setUp() {
-        atm = new AtmImpl();
+        atm = new AtmImpl(Roubles.class);
     }
 
 

@@ -2,7 +2,6 @@ package ru.otus.AtmImpl;
 
 import ru.otus.Atm.Atm;
 import ru.otus.Banknote.Banknote;
-import ru.otus.BanknoteImpl.Roubles;
 import ru.otus.Storage.Storage;
 import ru.otus.StorageImpl.StorageMemory;
 
@@ -13,8 +12,16 @@ public class AtmImpl implements Atm {
 
     private final Storage storage;
 
-    public AtmImpl() {
-        this.storage = new StorageMemory();
+    private Class currency;
+
+    public AtmImpl(Class<? extends Banknote> curr) {
+        this(curr, 0);
+    }
+
+    public AtmImpl(Class<? extends Banknote> curr, int initial) {
+        this.currency = curr;
+        Banknote b = (Banknote)Enum.valueOf((Class<Enum>)curr, "ONE");
+        this.storage = new StorageMemory(b, initial);
     }
 
     @Override
@@ -37,17 +44,19 @@ public class AtmImpl implements Atm {
             return storage.getAll();
         }
 
-        List<Integer> range = storage.range();
+        List<Banknote> range = storage.range();
 
-        if (sum % range.get(range.size() - 1) > 0) {
+        if (sum % range.get(range.size() - 1).value() > 0) {
             System.err.format("Cannot collect %d", sum);
             return new ArrayList<>();
         }
 
         List<Banknote> list = new ArrayList<>();
 
+        storage.save();
+
         for (int i = 0; i < range.size(); i++) {
-            int amount = sum / range.get(i);
+            int amount = sum / range.get(i).value();
             if (amount == 0) {
                 continue;
             }
@@ -55,7 +64,7 @@ public class AtmImpl implements Atm {
                 amount = storage.getAmount(range.get(i));
             }
             list.addAll(storage.get(range.get(i), amount));
-            sum -= amount * range.get(i);
+            sum -= amount * range.get(i).value();
             if (sum == 0) {
                 break;
             }
@@ -63,6 +72,7 @@ public class AtmImpl implements Atm {
 
         if (sum > 0) {
             System.err.format("Cannot collect %d", sum);
+            storage.restore();
             return new ArrayList<>();
         }
 
@@ -72,8 +82,8 @@ public class AtmImpl implements Atm {
     @Override
     public int balance() {
         int sum = 0;
-        for( int i : storage.range()) {
-            sum += storage.getAmount(i) * i;
+        for( Banknote b : storage.range()) {
+            sum += storage.getAmount(b) * b.value();
         }
         return sum;
     }

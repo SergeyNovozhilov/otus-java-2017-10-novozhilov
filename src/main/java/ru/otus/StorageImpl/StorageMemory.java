@@ -2,27 +2,35 @@ package ru.otus.StorageImpl;
 
 import ru.otus.AtmImpl.AtmException;
 import ru.otus.Banknote.Banknote;
+import ru.otus.BanknoteImpl.Roubles;
 import ru.otus.Storage.Storage;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class StorageMemory implements Storage {
 
-    private Map<Integer, List<Banknote>> moneys;
+    private Map<Banknote, Integer> moneys;
 
-    public StorageMemory() {
+    private List<Memento> savedStates;
+
+    private final int INITIAL = 0;
+    private final int SAVED = 1;
+
+    public StorageMemory(Banknote banknote, int initial) {
         init();
+        savedStates = new ArrayList<>();
+        for (Banknote b : banknote.getValues()) {
+            moneys.put(b, initial);
+        }
+        savedStates.add(new Memento(moneys));
     }
 
 
     @Override
     public void put(Banknote b) {
-        List<Banknote> list = moneys.get(b.value());
-        if (list == null) {
-            list = new ArrayList<>();
-            moneys.put(b.value(), list);
-        }
-        list.add(b);
+        Integer num = moneys.getOrDefault(b, 0);
+        moneys.put(b, ++num);
     }
 
     @Override
@@ -32,36 +40,71 @@ public class StorageMemory implements Storage {
 
 
     @Override
-    public int getAmount(int value) {
-        return moneys.get(value).size();
+    public int getAmount(Banknote b) {
+        return moneys.get(b);
     }
 
 
     @Override
-    public List<Banknote> get(int value, int amount) throws AtmException {
-        if (moneys.get(value).size() < amount) {
-            throw new AtmException(String.format("Not enough banknotes of %d", value));
+    public List<Banknote> get(Banknote b, int amount) throws AtmException {
+        if (moneys.isEmpty() || moneys.get(b) < amount) {
+            throw new AtmException(String.format("Not enough banknotes of %d", b.value()));
         }
-        List<Banknote> values = moneys.get(value);
-        List<Banknote> list = new ArrayList<>();
-        for (int i = 0; i < amount; i++) {
-            list.add(values.remove(values.size() - 1));
-        }
-        return list;
+        moneys.put(b, moneys.get(b) - amount);
+        return toBanknotes(b, amount);
     }
 
     @Override
     public List<Banknote> getAll() {
         List<Banknote> list = new ArrayList<>();
-        moneys.values().stream().forEach(l -> list.addAll(l));
+        for (Map.Entry e : moneys.entrySet()) {
+            list.addAll(toBanknotes((Banknote)e.getKey(), (int)e.getValue()));
+        }
         init();
         return list;
     }
 
     @Override
-    public List<Integer> range() {
-        List<Integer> list = new ArrayList<>(moneys.keySet());
-        Collections.sort(list, Collections.reverseOrder());
+    public List<Banknote> range() {
+        List<Banknote> list = new ArrayList<>(moneys.keySet());
+        list.sort(Comparator.comparingInt(Banknote::value).reversed());
+        return list;
+    }
+
+    @Override
+    public void save() {
+        if (savedStates.size() > 1) {
+            savedStates.set(SAVED, new Memento(moneys));
+        } else {
+            savedStates.add(new Memento(moneys));
+        }
+    }
+
+    @Override
+    public void restore() {
+        if (savedStates.size() > 1) {
+            moneys = savedStates.remove(savedStates.size() - 1).getSavedState();
+        } else {
+            restoreInitial();
+        }
+    }
+
+    @Override
+    public void restoreInitial() {
+        if (savedStates.size() > 0) {
+            moneys = savedStates.get(INITIAL).getSavedState();
+        } else {
+            init();
+        }
+    }
+
+    private List<Banknote> toBanknotes(Banknote b, int amount) {
+        List<Banknote> list = new ArrayList<>();
+
+        for (int i = 0; i < amount; i++) {
+            list.add(b.copy());
+        }
+
         return list;
     }
 

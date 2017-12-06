@@ -21,6 +21,15 @@ public enum Roubles implements Banknote{
         return value;
     }
 
+    public Banknote[] getValues() {
+        return values();
+    }
+
+    @Override
+    public Banknote copy() {
+        return Roubles.fromValue(value);
+    }
+
     public static Roubles fromValue(int value) {
         for (Roubles r : values()) {
             if (r.value == value) {
