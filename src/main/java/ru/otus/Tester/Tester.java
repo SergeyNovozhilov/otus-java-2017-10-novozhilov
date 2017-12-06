@@ -1,10 +1,7 @@
 package ru.otus.Tester;
 
 import com.google.common.reflect.ClassPath;
-import ru.otus.annotations.After;
-import ru.otus.annotations.Before;
-import ru.otus.annotations.MyParams;
-import ru.otus.annotations.Test;
+import ru.otus.annotations.*;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
@@ -82,28 +79,30 @@ public class Tester {
                 Object object = ReflectionHelper.instantiate(clazz);
                 try {
                     params = (Object[])ReflectionHelper.callMethod(object, method);
-                    for (Object o : params) {
-                        System.out.println(o);
-                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         }
         Results results = new Results();
+        Object[] finalParams = params;
         tests.forEach((key, value) -> {
             Object test = ReflectionHelper.instantiate(clazz);
             if (test != null) {
                 try {
                     for (Map.Entry e : befores.entrySet()) {
+                        List<Object> objects = new ArrayList<>();
                         Method method = (Method) e.getKey();
-                        Annotation[][] anns = method.getParameterAnnotations();
-                        for (Annotation[] a : anns) {
-                            for (Annotation o : a) {
-                                System.out.println(o);
+                        Annotation[][] annotations = method.getParameterAnnotations();
+                        for (Annotation[] anns : annotations) {
+                            for (Annotation ann : anns) {
+                                if (ann instanceof MyParam) {
+                                    MyParam mp = (MyParam)ann;
+                                    objects.add(finalParams[mp.index()]);
+                                }
                             }
                         }
-                        ReflectionHelper.callMethod(test, (Method) e.getKey(), (Class[]) e.getValue());
+                        ReflectionHelper.callMethod(test, (Method) e.getKey(), objects);
                     }
                     try {
                         ReflectionHelper.callMethod(test, key, value);

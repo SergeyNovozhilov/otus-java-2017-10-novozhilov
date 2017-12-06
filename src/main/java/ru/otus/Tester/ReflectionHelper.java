@@ -32,7 +32,9 @@ public class ReflectionHelper {
             if (args.length == 0) {
                 return method.invoke(object);
             }
-            return method.invoke(object, args);
+
+            method.getGenericParameterTypes()[0].getTypeName();
+            return method.invoke(object, "iuiuiu");
 
         } catch (Exception e) {
             throw e;
