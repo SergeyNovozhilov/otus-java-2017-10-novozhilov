@@ -12,16 +12,12 @@ public class AtmImpl implements Atm {
 
     private final Storage storage;
 
-    private Class currency;
-
-    public AtmImpl(Class<? extends Banknote> curr) {
+    public AtmImpl(Banknote curr) {
         this(curr, 0);
     }
 
-    public AtmImpl(Class<? extends Banknote> curr, int initial) {
-        this.currency = curr;
-        Banknote b = (Banknote)Enum.valueOf((Class<Enum>)curr, "ONE");
-        this.storage = new StorageMemory(b, initial);
+    public AtmImpl(Banknote curr, int initial) {
+        this.storage = new StorageMemory(curr, initial);
     }
 
     @Override

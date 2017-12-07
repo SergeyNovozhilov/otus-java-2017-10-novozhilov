@@ -20,7 +20,7 @@ public class AtmImplTest {
 
     @Before
     public void setUp() {
-        atm = new AtmImpl(Roubles.class);
+        atm = new AtmImpl(Roubles.fromValue(10));
     }
 
 
@@ -73,5 +73,4 @@ public class AtmImplTest {
             fail();
         }
     }
-
 }

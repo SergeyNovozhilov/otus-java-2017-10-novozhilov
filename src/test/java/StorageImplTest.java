@@ -82,19 +82,31 @@ public class StorageImplTest {
         }
     }
 
+
     @Test
-    public void simpleTest() {
-        Map<Integer, String> a = new HashMap<>();
-        a.put(0, "null");
-        a.put(1, "one");
+    public void testSaveRestore() {
+        System.out.println("StorageImplTest: testSaveRestore");
 
-        Map<Integer, String> b = new HashMap<>(a);
+        List<Banknote> list = Arrays.asList(Roubles.fromValue(50), Roubles.fromValue(100));
+        storage.put(list);
+        storage.save();
+        storage.getAll();
+        assertTrue(storage.getAll().isEmpty());
+        storage.restore();
+        List<Banknote> listRet = storage.getAll();
+        assertNotNull(listRet);
+        listRet.sort(Comparator.comparingInt(Banknote::value));
+        list.sort(Comparator.comparingInt(Banknote::value));
+        assertEquals(list, listRet);
+    }
 
-        a.put(0, "aaa");
+    @Test
+    public void testRestoreInitial() {
+        System.out.println("StorageImplTest: testMemento");
 
-        System.out.println("-- " + b.get(0));
-
-
-
+        List<Banknote> list = Arrays.asList(Roubles.fromValue(50), Roubles.fromValue(100));
+        storage.put(list);
+        storage.restoreInitial();
+        assertTrue(storage.getAll().isEmpty());
     }
 }
