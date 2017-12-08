@@ -2,13 +2,15 @@ package ru.otus.AtmImpl;
 
 import ru.otus.Atm.Atm;
 import ru.otus.Banknote.Banknote;
+import ru.otus.Event.Event;
+import ru.otus.Observer.Observer;
 import ru.otus.Storage.Storage;
 import ru.otus.StorageImpl.StorageMemory;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AtmImpl implements Atm {
+public class AtmImpl implements Atm, Observer {
 
     private final Storage storage;
 
@@ -82,5 +84,17 @@ public class AtmImpl implements Atm {
             sum += storage.getAmount(b) * b.value();
         }
         return sum;
+    }
+
+    @Override
+    public void notify(Event event) {
+        String type = event.getType();
+       switch (event.getType()) {
+           case "RestoreInitialEvent":
+               storage.restoreInitial();
+               break;
+           default:
+               break;
+       }
     }
 }
