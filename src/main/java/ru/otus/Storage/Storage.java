@@ -19,6 +19,8 @@ public interface Storage {
 
     List<Banknote> range();
 
+    boolean initStorageMemory(List<Banknote> list, int initial);
+
     void save();
 
     void restore();

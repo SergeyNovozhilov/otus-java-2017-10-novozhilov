@@ -14,12 +14,12 @@ public class AtmImpl implements Atm, Observer {
 
     private final Storage storage;
 
-    public AtmImpl(Banknote curr) {
-        this(curr, 0);
+    public AtmImpl() {
+        storage = new StorageMemory();
     }
 
-    public AtmImpl(Banknote curr, int initial) {
-        this.storage = new StorageMemory(curr, initial);
+    public boolean startAtm(List<Banknote> banknotes, int amount) {
+        return storage.initStorageMemory(banknotes, amount);
     }
 
     @Override

@@ -20,7 +20,15 @@ public class AtmImplTest {
 
     @Before
     public void setUp() {
-        atm = new AtmImpl(Roubles.fromValue(10));
+        atm = new AtmImpl();
+    }
+
+    @Test
+    public void testStart() {
+        System.out.println("AtmImplTest: testStart");
+        boolean res = atm.startAtm(Arrays.asList(Roubles.fromValue(10), Roubles.fromValue(100)), 5);
+        assertTrue(res);
+        assertTrue(atm.balance() == 550);
     }
 
 

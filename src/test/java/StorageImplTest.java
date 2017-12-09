@@ -23,7 +23,9 @@ public class StorageImplTest {
     @Before
     public void setUp() {
         System.out.println("setUp");
-        storage = new StorageMemory(Roubles.fromValue(10), 0);
+        storage = new StorageMemory();
+        storage.initStorageMemory(Arrays.asList(Roubles.fromValue(10)), 0);
+
     }
 
     @Test

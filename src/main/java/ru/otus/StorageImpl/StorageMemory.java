@@ -16,14 +16,23 @@ public class StorageMemory implements Storage {
 
     private final int INITIAL = 0;
     private final int SAVED = 1;
+    private boolean NOT_STARTED = true;
 
-    public StorageMemory(Banknote banknote, int initial) {
-        init();
+    public StorageMemory() {
+        clean();
         savedStates = new ArrayList<>();
-        for (Banknote b : banknote.getValues()) {
-            moneys.put(b, initial);
+    }
+
+    public boolean initStorageMemory(List<Banknote> list, int initial) {
+        if (NOT_STARTED) {
+            for (Banknote b : list) {
+                moneys.put(b, initial);
+            }
+            savedStates.add(new Memento(moneys));
+            NOT_STARTED = false;
+            return true;
         }
-        savedStates.add(new Memento(moneys));
+        return false;
     }
 
 
@@ -60,7 +69,7 @@ public class StorageMemory implements Storage {
         for (Map.Entry e : moneys.entrySet()) {
             list.addAll(toBanknotes((Banknote)e.getKey(), (int)e.getValue()));
         }
-        init();
+        clean();
         return list;
     }
 
@@ -94,7 +103,7 @@ public class StorageMemory implements Storage {
         if (savedStates.size() > 0) {
             moneys = savedStates.get(INITIAL).getSavedState();
         } else {
-            init();
+            clean();
         }
     }
 
@@ -108,7 +117,7 @@ public class StorageMemory implements Storage {
         return list;
     }
 
-    private void init() {
+    private void clean() {
         moneys = new HashMap<>();
     }
 

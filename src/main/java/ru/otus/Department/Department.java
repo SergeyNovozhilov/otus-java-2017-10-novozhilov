@@ -20,14 +20,12 @@ public class Department {
         subscribers = new ArrayList<>();
     }
 
-    public Atm addAtm(Banknote b) {
-        return new AtmImpl(b, 0);
+    public boolean addAtm(Atm atm) {
+        return atms.add(atm);
     }
 
-    public Atm addAtm(Banknote b, int initial) {
-        Atm atm = new AtmImpl(b, initial);
-        atms.add(atm);
-        return atm;
+    public boolean removeAtm(Atm atm) {
+        return atms.remove(atm);
     }
 
     public boolean register(Atm atm) {
@@ -46,5 +44,10 @@ public class Department {
         Event event = new RestoreInitialEvent();
 
         subscribers.forEach(s -> s.notify(event));
+    }
+
+    public int getTotalBalance() {
+        int sum = atms.stream().mapToInt(Atm::balance).sum();
+        return sum;
     }
 }
