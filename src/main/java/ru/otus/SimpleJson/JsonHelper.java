@@ -10,7 +10,12 @@ import java.util.Collection;
 public class JsonHelper {
     public void parseObject(Object object, JsonObjectBuilder job) {
 
+        if (object == null || job == null) {
+            return;
+        }
+
         for (Field field : object.getClass().getDeclaredFields()) {
+            boolean access = field.isAccessible();
             try {
                 field.setAccessible(true);
                 Object value = field.get(object);
@@ -32,6 +37,8 @@ public class JsonHelper {
                 }
             } catch (IllegalArgumentException | IllegalAccessException ex) {
                 ex.printStackTrace();
+            } finally {
+                field.setAccessible(access);
             }
         }
 

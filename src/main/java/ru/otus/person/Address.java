@@ -1,5 +1,8 @@
 package ru.otus.person;
 
+import lombok.EqualsAndHashCode;
+
+@EqualsAndHashCode
 public class Address {
     private String streetAddress;
 

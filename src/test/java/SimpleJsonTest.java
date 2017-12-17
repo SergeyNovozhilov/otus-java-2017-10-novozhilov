@@ -58,10 +58,7 @@ public class SimpleJsonTest {
 
         Person person1 = gson.fromJson(string, Person.class);
 
-        String s1 = gson.toJson(person);
 
-        person1 = gson.fromJson(s1, Person.class);
-
-        assertTrue(person.equals(person1));
+        assertEquals(person, person1);
     }
 }
