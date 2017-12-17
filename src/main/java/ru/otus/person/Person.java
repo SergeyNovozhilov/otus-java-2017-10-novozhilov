@@ -3,6 +3,10 @@ package ru.otus.person;
 import java.util.List;
 import java.util.Set;
 
+
+import lombok.EqualsAndHashCode;
+
+@EqualsAndHashCode
 public class Person {
     private String lastName;
 
@@ -12,7 +16,7 @@ public class Person {
 
     private List<String> strings;
 
-    private Set<String> set;
+    private Set<SomeClass> set;
 
     private Address address;
 
@@ -86,11 +90,11 @@ public class Person {
         this.strings = strings;
     }
 
-    public Set<String> getSet() {
+    public Set<SomeClass> getSet() {
         return set;
     }
 
-    public void setSet(Set<String> set) {
+    public void setSet(Set<SomeClass> set) {
         this.set = set;
     }
 
