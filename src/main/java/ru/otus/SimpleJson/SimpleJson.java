@@ -16,9 +16,10 @@ public class SimpleJson {
         if (object == null) {
             return null;
         }
-        JsonObjectBuilder job = Json.createObjectBuilder();
-
-        jHelper.parseObject(object, job);
+        if (object.getClass().getPackage().getName().equals("java.lang")) {
+           return object.toString();
+        }
+        JsonObjectBuilder job = jHelper.parseObject(object);
 
         JsonObject jo = job.build();
 

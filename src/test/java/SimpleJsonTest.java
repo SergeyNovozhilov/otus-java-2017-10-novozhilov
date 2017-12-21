@@ -23,10 +23,10 @@ public class SimpleJsonTest {
         person = new Person();
         person.setAddress(new Address("Street", 12345, "State", "City"));
         person.setAge(25);
-        person.setFirstName("John");
+        person.setFirstName(null);
         person.setLastName("Smith");
         person.setPhoneNumber(new PhoneNumber[]{new PhoneNumber("123 12-131-12", "phone"),
-                new PhoneNumber("123 12-131-13", "fax")});
+                new PhoneNumber("123 12-131-13", "fax"), null});
 
         person.setStrings(Arrays.asList("one", "two"));
 
@@ -41,7 +41,7 @@ public class SimpleJsonTest {
         some2.setArray(array);
         set.add(some2);
 
-        person.setSet(set);
+        person.setSet(null);
         String[] arr = {"AAA", "BBB"};
         person.setArray(arr);
     }
@@ -60,5 +60,19 @@ public class SimpleJsonTest {
 
 
         assertEquals(person, person1);
+    }
+
+    @Test
+    public void test() {
+        Gson gson = new Gson();
+        System.out.println(gson.toJson(123));
+        System.out.println(gson.toJson("abc"));
+        System.out.println(gson.toJson(true));
+
+        SimpleJson sj = new SimpleJson();
+        System.out.println(sj.toJson("abc"));
+        System.out.println(sj.toJson(123));
+
+        System.out.println(sj.toJson(true));
     }
 }
