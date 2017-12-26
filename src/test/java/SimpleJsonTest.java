@@ -20,10 +20,11 @@ public class SimpleJsonTest {
 
     @Before
     public void setUp() {
+        System.out.println("SimpleJsonTest: setUp");
         person = new Person();
         person.setAddress(new Address("Street", 12345, "State", "City"));
         person.setAge(25);
-        person.setFirstName(null);
+        person.setFirstName("Adam");
         person.setLastName("Smith");
         person.setPhoneNumber(new PhoneNumber[]{new PhoneNumber("123 12-131-12", "phone"),
                 new PhoneNumber("123 12-131-13", "fax"), null});
@@ -41,14 +42,32 @@ public class SimpleJsonTest {
         some2.setArray(array);
         set.add(some2);
 
-        person.setSet(null);
+        person.setSet(set);
         String[] arr = {"AAA", "BBB"};
         person.setArray(arr);
     }
 
     @Test
-    public void testSimpleJson() {
-        System.out.println("SimpleJsonTest: testSimpleJson");
+    public void testSimpleJsonFullObject() {
+        System.out.println("SimpleJsonTest: testSimpleJsonFullObject");
+
+        SimpleJson sj = new SimpleJson();
+
+        person.setSet(null);
+
+        String string = sj.toJson(person);
+
+        Gson gson = new Gson();
+
+        Person person1 = gson.fromJson(string, Person.class);
+
+
+        assertEquals(person, person1);
+    }
+
+    @Test
+    public void testSimpleJsonObjectWithNull() {
+        System.out.println("SimpleJsonTest: testSimpleJsonObjectWithNull");
 
         SimpleJson sj = new SimpleJson();
 
@@ -63,7 +82,8 @@ public class SimpleJsonTest {
     }
 
     @Test
-    public void test() {
+    public void simpleTest() {
+        System.out.println("SimpleJsonTest: simpleTest");
         Gson gson = new Gson();
         System.out.println(gson.toJson(123));
         System.out.println(gson.toJson("abc"));
@@ -72,7 +92,6 @@ public class SimpleJsonTest {
         SimpleJson sj = new SimpleJson();
         System.out.println(sj.toJson("abc"));
         System.out.println(sj.toJson(123));
-
         System.out.println(sj.toJson(true));
     }
 }
