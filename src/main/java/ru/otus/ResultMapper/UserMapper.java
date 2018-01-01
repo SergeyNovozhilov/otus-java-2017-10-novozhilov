@@ -19,6 +19,6 @@ public class UserMapper implements TResultMapper<UserDataSet>{
         long id = resultSet.getLong(COLUMN_ID);
         String name = resultSet.getString(COLUMN_NAME);
         int age = resultSet.getInt(COLUMN_AGE);
-        return new UserDataSet(id, name, age);
+        return null;
     }
 }
