@@ -1,10 +1,8 @@
-package ru.otus.DbConnectionHelper;
-
-import ru.otus.DbConnectionHelper.DbConnectionHelper;
+package ru.otus.DbConnection;
 
 import java.sql.*;
 
-public class PostgresConnectionHelper implements DbConnectionHelper {
+public class PostgresConnectionHelper implements DbConnection {
 
     @Override
     public Connection getConnection() {

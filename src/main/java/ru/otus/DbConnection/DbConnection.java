@@ -1,4 +1,4 @@
-package ru.otus.DbConnectionHelper;
+package ru.otus.DbConnection;
 
 import java.sql.Connection;
 
