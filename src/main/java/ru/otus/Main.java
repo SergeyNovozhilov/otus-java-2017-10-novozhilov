@@ -2,15 +2,14 @@ package ru.otus;
 
 
 import ru.otus.DataSet.UserDataSet;
-import ru.otus.DbConnectionHelper.DbConnectionHelper;
-import ru.otus.DbConnectionHelper.PostgresConnectionHelper;
+import ru.otus.DbConnection.PostgresConnection;
 import ru.otus.DbService.DbServiceImpl;
 import ru.otus.ResultMapper.UserMapper;
 
 public class Main {
     public static void main(String[] args) {
 
-        DbServiceImpl ds = new DbServiceImpl(new PostgresConnectionHelper());
+        DbServiceImpl ds = new DbServiceImpl(new PostgresConnection());
 
         ds.register(UserDataSet.class, new UserMapper());
 

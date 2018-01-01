@@ -2,7 +2,7 @@ package ru.otus.DbConnection;
 
 import java.sql.*;
 
-public class PostgresConnectionHelper implements DbConnection {
+public class PostgresConnection implements DbConnection {
 
     @Override
     public Connection getConnection() {

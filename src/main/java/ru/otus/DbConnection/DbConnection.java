@@ -2,6 +2,6 @@ package ru.otus.DbConnection;
 
 import java.sql.Connection;
 
-public interface DbConnectionHelper {
+public interface DbConnection {
     Connection getConnection();
 }

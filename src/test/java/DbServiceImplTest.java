@@ -1,7 +1,7 @@
 import org.junit.Before;
 import org.junit.Test;
 import ru.otus.DataSet.UserDataSet;
-import ru.otus.DbConnectionHelper.PostgresConnectionHelper;
+import ru.otus.DbConnection.PostgresConnection;
 import ru.otus.DbService.DbServiceImpl;
 import ru.otus.ResultMapper.UserMapper;
 
@@ -13,7 +13,7 @@ public class DbServiceImplTest {
 
     @Before
     public void setUp() {
-        ds = new DbServiceImpl(new PostgresConnectionHelper());
+        ds = new DbServiceImpl(new PostgresConnection());
         ds.dropTable(UserDataSet.class);
         ds.register(UserDataSet.class, new UserMapper());
     }

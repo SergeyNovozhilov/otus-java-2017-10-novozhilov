@@ -1,7 +1,7 @@
 package ru.otus.DbService;
 
 import ru.otus.DataSet.DataSet;
-import ru.otus.DbConnectionHelper.DbConnectionHelper;
+import ru.otus.DbConnection.DbConnection;
 import ru.otus.Executor.Executor;
 import ru.otus.ResultMapper.TResultMapper;
 import ru.otus.ResultMapper.UserMapper;
@@ -24,7 +24,7 @@ public class DbServiceImpl implements DbService, AutoCloseable {
         this.connection = connection;
     }
 
-    public DbServiceImpl(DbConnectionHelper connectionHelper) {
+    public DbServiceImpl(DbConnection connectionHelper) {
         this.connection = connectionHelper.getConnection();
     }
 
