@@ -1,34 +1,26 @@
 package ru.otus.Executor;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import ru.otus.DataSet.DataSet;
-import ru.otus.ResultMapper.TResultMapper;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+import java.util.function.Function;
 
 public class Executor {
-    private final Connection connection;
+    private final SessionFactory sessionFactory;
 
-    public Executor(Connection connection) {
-        this.connection = connection;
+    public Executor(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 
-    public <T extends DataSet> T execQuery(String query, TResultMapper<T> mapper) throws SQLException {
-        try(Statement stmt = connection.createStatement()) {
-            stmt.execute(query);
-            ResultSet result = stmt.getResultSet();
-            if (result.next()) {
-                return mapper.map(result);
-            }
-            return null;
-        }
-    }
-
-    public int execUpdate(String query) throws SQLException {
-        try(Statement stmt = connection.createStatement()) {
-            return stmt.executeUpdate(query);
+    public <T extends DataSet> T execute(Function<Session, T> function) throws SQLException {
+        try (Session session = this.sessionFactory.openSession()) {
+            Transaction transaction = session.beginTransaction();
+            T result = function.apply(session);
+            transaction.commit();
+            return result;
         }
     }
 

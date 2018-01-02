@@ -1,11 +1,19 @@
 package ru.otus.DataSet;
 
+import javax.persistence.*;
 import java.util.List;
 
+@Entity
+@Table(name = "users")
 public class UserDataSet extends DataSet{
+    @Column(name = "name")
     private String name;
+    @Column(name = "age")
     private int age;
+    @OneToOne(cascade = CascadeType.ALL)
     private AddressDataSet address;
+    @OneToMany(cascade = CascadeType.ALL,
+            orphanRemoval = true)
     private List<PhoneDataSet> phones;
 
     public UserDataSet(String name, int age, AddressDataSet address, List<PhoneDataSet> phones) {

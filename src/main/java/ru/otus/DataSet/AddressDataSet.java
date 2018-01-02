@@ -1,6 +1,13 @@
 package ru.otus.DataSet;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "addresses")
 public class AddressDataSet extends  DataSet{
+    @Column(name = "street")
     private String street;
 
     public AddressDataSet(String street) {
