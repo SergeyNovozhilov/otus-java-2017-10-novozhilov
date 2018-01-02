@@ -64,7 +64,7 @@ public class DbServiceImpl implements DbService, AutoCloseable {
         connection.close();
     }
 
-    public <T extends DataSet> void register(Class<T> clazz, TResultMapper<T> mapper) {
+    public <T extends DataSet> void classRegister(Class<T> clazz, TResultMapper<T> mapper) {
         try {
             String tableName = getTableName(clazz);
             DatabaseMetaData dbm = connection.getMetaData();

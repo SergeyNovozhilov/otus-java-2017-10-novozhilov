@@ -2,6 +2,7 @@ import org.junit.Before;
 import org.junit.Test;
 import ru.otus.DataSet.UserDataSet;
 import ru.otus.DbConnection.PostgresConnection;
+import ru.otus.DbService.DbService;
 import ru.otus.DbService.DbServiceImpl;
 import ru.otus.ResultMapper.UserMapper;
 
@@ -9,13 +10,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 public class DbServiceImplTest {
-    private DbServiceImpl ds;
+    private DbService ds;
 
     @Before
     public void setUp() {
         ds = new DbServiceImpl(new PostgresConnection());
         ds.dropTable(UserDataSet.class);
-        ds.register(UserDataSet.class, new UserMapper());
+        ds.classRegister(UserDataSet.class, new UserMapper());
     }
 
     @Test
