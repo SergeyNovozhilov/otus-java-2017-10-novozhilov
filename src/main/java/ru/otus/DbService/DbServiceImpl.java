@@ -1,6 +1,7 @@
 package ru.otus.DbService;
 
 import ru.otus.DataSet.DataSet;
+import ru.otus.DataSet.UserDataSet;
 import ru.otus.DbConnection.DbConnection;
 import ru.otus.Executor.Executor;
 import ru.otus.ResultMapper.TResultMapper;
@@ -22,10 +23,11 @@ public class DbServiceImpl implements DbService, AutoCloseable {
 
     public DbServiceImpl(Connection connection) {
         this.connection = connection;
+        classRegister(UserDataSet.class, new UserMapper());
     }
 
     public DbServiceImpl(DbConnection connectionHelper) {
-        this.connection = connectionHelper.getConnection();
+        this(connectionHelper.getConnection());
     }
 
     public <T extends DataSet> void save(T object) {
@@ -64,7 +66,7 @@ public class DbServiceImpl implements DbService, AutoCloseable {
         connection.close();
     }
 
-    public <T extends DataSet> void classRegister(Class<T> clazz, TResultMapper<T> mapper) {
+    private <T extends DataSet> void classRegister(Class<T> clazz, TResultMapper<T> mapper) {
         try {
             String tableName = getTableName(clazz);
             DatabaseMetaData dbm = connection.getMetaData();
@@ -111,18 +113,21 @@ public class DbServiceImpl implements DbService, AutoCloseable {
         tablesMap.put(clazz, tableName);
     }
 
-    public <T extends DataSet> void dropTable(Class<T> clazz) {
+    public <T extends DataSet> void clearTable(Class<T> clazz) {
         String tableName = getTableName(clazz);
         if (tableName == null) {
             return;
         }
-        String request = "DROP TABLE " + tableName;
+        String request = "DELETE FROM " + tableName;
+        String dropId = "ALTER SEQUENCE " + tableName +"_id_seq RESTART WITH 1";
         Executor executor = new Executor(connection);
         try {
             executor.execUpdate(request);
+            executor.execUpdate(dropId);
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
     }
 
     private String convertToProstgresType(String type) {

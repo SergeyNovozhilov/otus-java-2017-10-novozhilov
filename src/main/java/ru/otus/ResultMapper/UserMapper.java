@@ -1,5 +1,6 @@
 package ru.otus.ResultMapper;
 
+import org.apache.commons.lang3.StringUtils;
 import ru.otus.DataSet.DataSet;
 import ru.otus.DataSet.UserDataSet;
 
@@ -18,6 +19,7 @@ public class UserMapper implements TResultMapper<UserDataSet>{
     public UserDataSet map(ResultSet resultSet) throws SQLException {
         long id = resultSet.getLong(COLUMN_ID);
         String name = resultSet.getString(COLUMN_NAME);
+        name = StringUtils.equalsIgnoreCase("null", name) ? null : name;
         int age = resultSet.getInt(COLUMN_AGE);
         return new UserDataSet(id, name, age);
     }

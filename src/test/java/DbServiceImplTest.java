@@ -15,8 +15,7 @@ public class DbServiceImplTest {
     @Before
     public void setUp() {
         ds = new DbServiceImpl(new PostgresConnection());
-        ds.dropTable(UserDataSet.class);
-        ds.classRegister(UserDataSet.class, new UserMapper());
+        ds.clearTable(UserDataSet.class);
     }
 
     @Test
@@ -44,9 +43,8 @@ public class DbServiceImplTest {
         if (ds == null) {
             fail();
         }
-        String nul = "null";
 
-        UserDataSet userOrig = new UserDataSet(nul, 23);
+        UserDataSet userOrig = new UserDataSet(null, 23);
 
         ds.save(userOrig);
 
