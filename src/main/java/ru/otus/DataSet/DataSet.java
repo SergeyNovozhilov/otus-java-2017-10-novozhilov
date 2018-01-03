@@ -12,10 +12,6 @@ public abstract class DataSet {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected long id;
 
-    public DataSet(long id) {
-        this.id = id;
-    }
-
     public long getId() {
         return id;
     }

@@ -1,6 +1,5 @@
 package ru.otus.Dao;
 
-import org.hibernate.Session;
 import org.hibernate.query.Query;
 import ru.otus.DataSet.UserDataSet;
 
@@ -11,35 +10,31 @@ import java.util.List;
 
 public class UserDataSetDao extends DataSetDao<UserDataSet> {
 
-    public UserDataSetDao(Session session) {
-        this.session = session;
-    }
-
     @Override
     public void save(UserDataSet dataSet)  {
-        session.save(dataSet);
+        getSession().save(dataSet);
     }
 
     @Override
     public UserDataSet read(long id) {
-        return session.load(UserDataSet.class, id);
+        return getSession().load(UserDataSet.class, id);
     }
 
     @Override
-    public UserDataSet readByName(String name) {
-        CriteriaBuilder builder = session.getCriteriaBuilder();
+    public UserDataSet read(String name) {
+        CriteriaBuilder builder = getSession().getCriteriaBuilder();
         CriteriaQuery<UserDataSet> criteria = builder.createQuery(UserDataSet.class);
         Root<UserDataSet> from = criteria.from(UserDataSet.class);
         criteria.where(builder.equal(from.get("name"), name));
-        Query<UserDataSet> query = session.createQuery(criteria);
+        Query<UserDataSet> query = getSession().createQuery(criteria);
         return query.uniqueResult();
     }
 
     @Override
     public List<UserDataSet> readAll() {
-        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaBuilder builder = getSession().getCriteriaBuilder();
         CriteriaQuery<UserDataSet> criteria = builder.createQuery(UserDataSet.class);
         criteria.from(UserDataSet.class);
-        return session.createQuery(criteria).list();
+        return getSession().createQuery(criteria).list();
     }
 }

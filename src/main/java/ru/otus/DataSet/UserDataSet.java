@@ -16,8 +16,10 @@ public class UserDataSet extends DataSet{
             orphanRemoval = true)
     private List<PhoneDataSet> phones;
 
+    public UserDataSet() {
+    }
+
     public UserDataSet(String name, int age, AddressDataSet address, List<PhoneDataSet> phones) {
-        super(-1);
         this.name = name;
         this.age = age;
         this.address = address;
@@ -25,7 +27,7 @@ public class UserDataSet extends DataSet{
     }
 
     public UserDataSet(long id, String name, int age, AddressDataSet address, List<PhoneDataSet> phones) {
-        super(id);
+        this.setId(id);
         this.name = name;
         this.age = age;
         this.address = address;

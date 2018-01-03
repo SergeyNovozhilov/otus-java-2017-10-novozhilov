@@ -10,13 +10,15 @@ public class AddressDataSet extends  DataSet{
     @Column(name = "street")
     private String street;
 
+    public AddressDataSet() {
+    }
+
     public AddressDataSet(String street) {
-        super(-1);
         this.street = street;
     }
 
     public AddressDataSet(long id, String street) {
-        super(id);
+        this.setId(id);
         this.street = street;
     }
 

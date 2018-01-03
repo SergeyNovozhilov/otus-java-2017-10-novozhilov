@@ -6,13 +6,21 @@ import ru.otus.DataSet.DataSet;
 import java.util.List;
 
 public abstract class DataSetDao <T extends DataSet> {
-    protected Session session;
+    private Session session;
+
+    public void setSession(Session session) {
+        this.session = session;
+    }
+
+    public Session getSession() {
+        return session;
+    }
 
     public abstract void save(T dataSet);
 
     public abstract T read(long id);
 
-    public abstract T readByName(String name);
+    public abstract T read(String name);
 
     public abstract List<T> readAll();
 }
