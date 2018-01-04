@@ -1,10 +1,8 @@
 import org.junit.Before;
 import org.junit.Test;
 import ru.otus.DataSet.UserDataSet;
-import ru.otus.DbConnection.PostgresConnection;
 import ru.otus.DbService.DbService;
-import ru.otus.DbService.DbServiceImpl;
-import ru.otus.ResultMapper.UserMapper;
+import ru.otus.DbService.DbServiceMyBatisImpl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -14,8 +12,7 @@ public class DbServiceImplTest {
 
     @Before
     public void setUp() {
-        ds = new DbServiceImpl(new PostgresConnection());
-        ds.clearTable(UserDataSet.class);
+        ds = new DbServiceMyBatisImpl();
     }
 
     @Test
