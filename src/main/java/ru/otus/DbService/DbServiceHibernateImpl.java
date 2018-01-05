@@ -1,20 +1,25 @@
 package ru.otus.DbService;
 
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 import ru.otus.Dao.DataSetDao;
+import ru.otus.Dao.UserDataSetDao;
 import ru.otus.DataSet.AddressDataSet;
 import ru.otus.DataSet.DataSet;
 import ru.otus.DataSet.PhoneDataSet;
 import ru.otus.DataSet.UserDataSet;
 import ru.otus.Executor.Executor;
-import ru.otus.Utils.DaoManager;
+import ru.otus.DaoManager.DaoManager;
 
 import java.sql.SQLException;
+import java.util.List;
+import java.util.function.Function;
 
-public class DbServiceHibernateImpl implements DbService{
+public class DbServiceHibernateImpl implements DbService, AutoCloseable {
     private final SessionFactory sessionFactory;
 
     public DbServiceHibernateImpl() {
@@ -43,36 +48,48 @@ public class DbServiceHibernateImpl implements DbService{
     }
 
 
-
     @Override
     public <T extends DataSet> void save(T object) {
         Executor exec = new Executor(sessionFactory);
-        try {
-            exec.execute(session -> {
-                DataSetDao dao = DaoManager.getDao(object.getClass());
-                dao.setSession(session);
-                dao.save(object);
-                return null;
-            });
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        exec.execute(session -> {
+            DataSetDao dao = DaoManager.getDao(object.getClass());
+            dao.setSession(session);
+            dao.save(object);
+            return null;
+        });
     }
 
     @Override
     public <T extends DataSet> T load(long id, Class<T> clazz) {
         Executor exec = new Executor(sessionFactory);
-        try {
-            return (T)exec.execute(session -> {
-                DataSetDao dao = DaoManager.getDao(clazz);
-                dao.setSession(session);
-                return dao.read(id);
-            });
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return (T) exec.execute(session -> {
+            DataSetDao dao = DaoManager.getDao(clazz);
+            dao.setSession(session);
+            return dao.read(id);
+        });
+    }
 
+    public <T extends DataSet> T read(String name, Class<T> clazz) {
+        Executor exec = new Executor(sessionFactory);
+        return (T) exec.execute(session -> {
+            DataSetDao dao = DaoManager.getDao(clazz);
+            dao.setSession(session);
+            return dao.read(name);
+        });
+    }
 
+    public <T extends DataSet> List<T> readAll(Class<T> clazz) {
+        Executor exec = new Executor(sessionFactory);
+        return exec.execute(session -> {
+            DataSetDao dao = DaoManager.getDao(clazz);
+            dao.setSession(session);
+            return dao.readAll();
+        });
+    }
+
+    @Override
+    public void close() {
+        sessionFactory.close();
+        System.out.println("Closed");
     }
 }

@@ -15,7 +15,7 @@ public class Executor {
         this.sessionFactory = sessionFactory;
     }
 
-    public <T extends DataSet> T execute(Function<Session, T> function) throws SQLException {
+    public <T> T execute(Function<Session, T> function) {
         try (Session session = this.sessionFactory.openSession()) {
             Transaction transaction = session.beginTransaction();
             T result = function.apply(session);
@@ -23,5 +23,4 @@ public class Executor {
             return result;
         }
     }
-
 }

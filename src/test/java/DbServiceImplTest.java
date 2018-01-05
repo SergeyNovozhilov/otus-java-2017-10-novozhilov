@@ -1,3 +1,4 @@
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import ru.otus.DataSet.AddressDataSet;
@@ -25,10 +26,11 @@ public class DbServiceImplTest {
     }
 
     @Test
-    public void testDb() {
+    public void testDs() {
         System.out.println("DbServiceImplTest : testDb");
 
-        AddressDataSet address = new AddressDataSet("Ark street");
+        String street = "Ark street";
+        AddressDataSet address = new AddressDataSet(street);
         UserDataSet user = new UserDataSet("Jones", 27, address, null);
         List<PhoneDataSet> phones = Arrays.asList(new PhoneDataSet("110-12-23", user), new PhoneDataSet("113-23-34", user));
         user.setPhones(phones);
@@ -48,7 +50,7 @@ public class DbServiceImplTest {
                 userRead.getPhones().stream().map(p -> p.getNumber()).collect(Collectors.toList()),
                 user.getPhones().stream().map(p -> p.getNumber()).collect(Collectors.toList())));
 
-        AddressDataSet addressRead = ds.load(1, AddressDataSet.class);
+        AddressDataSet addressRead = ds.read(street, AddressDataSet.class);
 
         if (addressRead == null) {
             fail();
@@ -56,6 +58,17 @@ public class DbServiceImplTest {
 
         assertEquals(addressRead.getStreet(), address.getStreet());
 
+        List<PhoneDataSet> phonesRead = ds.readAll(PhoneDataSet.class);
+
+        assertTrue(CollectionUtils.isEqualCollection(
+                phonesRead.stream().map(p -> p.getNumber()).collect(Collectors.toList()),
+                phones.stream().map(p -> p.getNumber()).collect(Collectors.toList())));
+
+    }
+
+    @After
+    public void close () {
+        ds.close();
     }
 
 }

@@ -1,6 +1,5 @@
-package ru.otus.Utils;
+package ru.otus.DaoManager;
 
-import org.hibernate.Session;
 import ru.otus.Dao.AddressDataSetDao;
 import ru.otus.Dao.DataSetDao;
 import ru.otus.Dao.PhoneDataSetDao;
