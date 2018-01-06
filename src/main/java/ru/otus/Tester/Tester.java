@@ -6,10 +6,7 @@ import ru.otus.annotations.*;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Tester {
@@ -53,26 +50,25 @@ public class Tester {
     }
 
     private static Results execute(Class clazz) {
-        Map<Method, Class[]> befores = new HashMap<>();
-        Map<Method, Class[]> tests = new HashMap<>();
-        Map<Method, Class[]> afters = new HashMap<>();
+        List<Method> befores = new ArrayList<>();
+        List<Method> tests = new ArrayList<>();
+        List<Method> afters = new ArrayList<>();
 
         Object[] params = null;
 
-
         for (Method method : clazz.getDeclaredMethods()) {
             if (method.isAnnotationPresent(Before.class)) {
-                befores.put(method, method.getParameterTypes());
+                befores.add(method);
                 continue;
             }
 
             if (method.isAnnotationPresent(Test.class)) {
-                tests.put(method, method.getParameterTypes());
+                tests.add(method);
                 continue;
             }
 
             if (method.isAnnotationPresent(After.class)) {
-                afters.put(method, method.getParameterTypes());
+                afters.add(method);
             }
 
             if (method.isAnnotationPresent(MyParams.class)) {
@@ -86,42 +82,48 @@ public class Tester {
         }
         Results results = new Results();
         Object[] finalParams = params;
-        tests.forEach((key, value) -> {
-            Object test = ReflectionHelper.instantiate(clazz);
-            if (test != null) {
+        tests.forEach(test -> {
+            Object testObject = ReflectionHelper.instantiate(clazz);
+            if (testObject != null) {
                 try {
-                    for (Map.Entry e : befores.entrySet()) {
-                        List<Object> objects = new ArrayList<>();
-                        Method method = (Method) e.getKey();
-                        Annotation[][] annotations = method.getParameterAnnotations();
-                        for (Annotation[] anns : annotations) {
-                            for (Annotation ann : anns) {
-                                if (ann instanceof MyParam) {
-                                    MyParam mp = (MyParam)ann;
-                                    objects.add(finalParams[mp.index()]);
-                                }
-                            }
-                        }
-                        ReflectionHelper.callMethod(test, (Method) e.getKey(), objects);
+                    for (Method before : befores) {
+                        ReflectionHelper.callMethod(testObject, before, getParams(before, finalParams));
                     }
                     try {
-                        ReflectionHelper.callMethod(test, key, value);
+                        ReflectionHelper.callMethod(testObject, test, getParams(test, finalParams));
                         results.addPassed();
                     } catch (Exception ex) {
                         System.out.println(ex.getCause());
                         results.addFailed();
                     }
-                    for (Map.Entry e : afters.entrySet()) {
-                        ReflectionHelper.callMethod(test, (Method) e.getKey(), (Class[]) e.getValue());
+                    for (Method after : afters) {
+                        ReflectionHelper.callMethod(testObject, after, getParams(after, finalParams));
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                     return;
                 }
             } else {
-                System.out.println("Can not instantiate object " + clazz.getName() + ". Exit.");
+                System.out.println("Cannot instantiate object " + clazz.getName() + ". Exit.");
             }
         });
         return results;
+    }
+
+    private static Object[] getParams(Method method, Object[] finalParams)  {
+        List<Object> objects = new ArrayList<>();
+        Annotation[][] annotations = method.getParameterAnnotations();
+        if (annotations.length == 0) {
+            return new Object[0];
+        }
+        for (Annotation[] anns : annotations) {
+            for (Annotation ann : anns) {
+                if (ann instanceof MyParam) {
+                    MyParam mp = (MyParam)ann;
+                    objects.add(finalParams[mp.index()]);
+                }
+            }
+        }
+        return objects.toArray();
     }
 }

@@ -1,16 +1,25 @@
 package ru.otus;
 
 public class ObjectClass {
-    private String field;
+    private String sField;
+    private int iField;
 
     public ObjectClass() {
     }
 
-    public String getField() {
-        return field;
+    public String getSField() {
+        return sField;
     }
 
-    public void setField(String field) {
-        this.field = field;
+    public void setSField(String field) {
+        this.sField = field;
+    }
+
+    public int getIField() {
+        return iField;
+    }
+
+    public void setIField(int field) {
+        this.iField = field;
     }
 }
