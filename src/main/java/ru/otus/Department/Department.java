@@ -21,10 +21,14 @@ public class Department {
     }
 
     public boolean addAtm(Atm atm) {
-        return atms.add(atm);
+        if (register(atm)) {
+            return atms.add(atm);
+        }
+        return false;
     }
 
     public boolean removeAtm(Atm atm) {
+        unregister(atm);
         return atms.remove(atm);
     }
 
