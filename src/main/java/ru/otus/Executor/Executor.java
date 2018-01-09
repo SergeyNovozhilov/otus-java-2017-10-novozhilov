@@ -16,7 +16,7 @@ public class Executor {
     }
 
     public <T> T execute(Function<Session, T> function) {
-        try (Session session = this.sessionFactory.openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             Transaction transaction = session.beginTransaction();
             T result = function.apply(session);
             transaction.commit();

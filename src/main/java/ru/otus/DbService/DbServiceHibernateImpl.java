@@ -19,7 +19,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.function.Function;
 
-public class DbServiceHibernateImpl implements DbService, AutoCloseable {
+public class DbServiceHibernateImpl implements DbService {
     private final SessionFactory sessionFactory;
 
     public DbServiceHibernateImpl() {
@@ -89,7 +89,11 @@ public class DbServiceHibernateImpl implements DbService, AutoCloseable {
 
     @Override
     public void close() {
-        sessionFactory.close();
-        System.out.println("Closed");
+        if (sessionFactory != null) {
+            sessionFactory.close();
+            System.out.println("Closed");
+        } else {
+            System.out.println("SessionFactory is null.");
+        }
     }
 }
