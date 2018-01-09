@@ -8,14 +8,11 @@ import ru.otus.ResultMapper.TResultMapper;
 import ru.otus.ResultMapper.UserMapper;
 
 import java.lang.reflect.Field;
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DbServiceImpl implements DbService, AutoCloseable {
+public class DbServiceImpl implements DbService {
     private final Connection connection;
 
     private Map<Class, TResultMapper> mappersMap = new HashMap<>();
@@ -51,19 +48,24 @@ public class DbServiceImpl implements DbService, AutoCloseable {
             return null;
         }
 
-            String request = "SELECT * from " + tableName + (" where id = %s");
-            Executor executor = new Executor(connection);
-            try {
-                return (T) executor.execQuery(String.format(request, id), new UserMapper());
-            } catch (SQLException e) {
-                e.printStackTrace();
-                return null;
+        try {
+            try (PreparedStatement request = connection.prepareStatement("SELECT * from ? WHERE ID = ?")) {
+                request.setString(1, tableName);
+                request.setLong(2, id);
+                Executor executor = new Executor(connection);
+                return (T) executor.execQuery(request, new UserMapper());
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
     public void close() throws Exception {
-        connection.close();
+        if (connection != null) {
+            connection.close();
+        }
     }
 
     private <T extends DataSet> void classRegister(Class<T> clazz, TResultMapper<T> mapper) {
@@ -119,7 +121,7 @@ public class DbServiceImpl implements DbService, AutoCloseable {
             return;
         }
         String request = "DELETE FROM " + tableName;
-        String dropId = "ALTER SEQUENCE " + tableName +"_id_seq RESTART WITH 1";
+        String dropId = "ALTER SEQUENCE " + tableName + "_id_seq RESTART WITH 1";
         Executor executor = new Executor(connection);
         try {
             executor.execUpdate(request);
@@ -132,17 +134,17 @@ public class DbServiceImpl implements DbService, AutoCloseable {
 
     private String convertToProstgresType(String type) {
         switch (type) {
-            case "int" :
+            case "int":
                 return "int";
-            case "String" :
+            case "String":
                 return "varchar(256)";
-            case "long" :
+            case "long":
                 return "bigint";
-            case "boolean" :
+            case "boolean":
                 return "boolean";
-            case "double" :
+            case "double":
                 return "double precision";
-            default :
+            default:
                 return null;
         }
     }

@@ -35,6 +35,11 @@ public class DbServiceImplTest {
         assertEquals(userOrig.getName(), user.getName());
         assertEquals(userOrig.getAge(), user.getAge());
 
+        try {
+            ds.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
