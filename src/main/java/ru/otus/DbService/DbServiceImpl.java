@@ -52,7 +52,7 @@ public class DbServiceImpl implements DbService {
             try (PreparedStatement request = connection.prepareStatement("SELECT * from ? WHERE ID = ?")) {
                 request.setString(1, tableName);
                 request.setLong(2, id);
-                Executor executor = new Executor(connection);
+                Executor executor = new Executor();
                 return (T) executor.execQuery(request, new UserMapper());
             }
         } catch (SQLException e) {
@@ -120,16 +120,20 @@ public class DbServiceImpl implements DbService {
         if (tableName == null) {
             return;
         }
-        String request = "DELETE FROM " + tableName;
-        String dropId = "ALTER SEQUENCE " + tableName + "_id_seq RESTART WITH 1";
-        Executor executor = new Executor(connection);
+
         try {
-            executor.execUpdate(request);
-            executor.execUpdate(dropId);
+            Executor executor = new Executor();
+            try (PreparedStatement request = connection.prepareStatement("DELETE FROM ?")) {
+                request.setString(1, tableName);
+                executor.execUpdate(request);
+            }
+            try (PreparedStatement request = connection.prepareStatement("ALTER SEQUENCE ?_id_seq RESTART WITH 1")) {
+                request.setString(1, tableName);
+                executor.execUpdate(request);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
 
     private String convertToProstgresType(String type) {
