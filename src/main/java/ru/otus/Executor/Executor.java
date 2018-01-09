@@ -8,8 +8,13 @@ import java.sql.*;
 public class Executor {
     private final Connection connection;
 
+
     public Executor(Connection connection) {
         this.connection = connection;
+    }
+
+    public Executor() {
+        this.connection = null;
     }
 
     public <T extends DataSet> T execQuery(String query, TResultMapper<T> mapper) throws SQLException {
@@ -37,6 +42,10 @@ public class Executor {
         try (Statement stmt = connection.createStatement()) {
             return stmt.executeUpdate(query);
         }
+    }
+
+    public int execUpdate(PreparedStatement query) throws SQLException {
+            return query.executeUpdate();
     }
 
 }
