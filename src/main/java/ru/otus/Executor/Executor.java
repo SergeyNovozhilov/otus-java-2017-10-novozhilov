@@ -18,6 +18,10 @@ public class Executor {
     }
 
     public <T extends DataSet> T execQuery(String query, TResultMapper<T> mapper) throws SQLException {
+        if (connection == null) {
+            System.err.println("Connection is null");
+            return null;
+        }
         try (Statement stmt = connection.createStatement()) {
             stmt.execute(query);
             try (ResultSet result = stmt.getResultSet()) {
