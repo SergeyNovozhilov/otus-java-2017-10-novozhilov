@@ -1,3 +1,4 @@
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import ru.otus.DataSet.UserDataSet;
@@ -35,11 +36,6 @@ public class DbServiceImplTest {
         assertEquals(userOrig.getName(), user.getName());
         assertEquals(userOrig.getAge(), user.getAge());
 
-        try {
-            ds.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     @Test
@@ -61,5 +57,14 @@ public class DbServiceImplTest {
 
     }
 
+    @After
+    public void close() {
+        try {
+            ds.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail();
+        }
+    }
 
 }

@@ -49,9 +49,9 @@ public class DbServiceImpl implements DbService {
         }
 
         try {
-            try (PreparedStatement request = connection.prepareStatement("SELECT * from ? WHERE ID = ?")) {
-                request.setString(1, tableName);
-                request.setLong(2, id);
+            String sql = "SELECT * from %s WHERE ID = ?";
+            try (PreparedStatement request = connection.prepareStatement(String.format(sql, tableName))) {
+                request.setLong(1, id);
                 Executor executor = new Executor(connection);
                 return (T) executor.execQuery(request, new UserMapper());
             }
