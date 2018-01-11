@@ -68,7 +68,11 @@ public class DbServiceImplTest {
 
     @After
     public void close () {
-        ds.close();
+        try {
+            ds.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }
