@@ -14,6 +14,9 @@ import ru.otus.DataSet.PhoneDataSet;
 import ru.otus.DataSet.UserDataSet;
 import ru.otus.Executor.Executor;
 import ru.otus.DaoManager.DaoManager;
+import ru.otus.cache.Cache;
+import ru.otus.cache.CacheImpl;
+import ru.otus.cache.Element;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -21,8 +24,10 @@ import java.util.function.Function;
 
 public class DbServiceHibernateImpl implements DbService {
     private final SessionFactory sessionFactory;
+    private final Cache<String, DataSet> cache;
 
     public DbServiceHibernateImpl() {
+        cache = new CacheImpl<>(5, 1000, 1000, false);
         Configuration configuration = new Configuration();
 
         configuration.addAnnotatedClass(AddressDataSet.class);
@@ -61,21 +66,35 @@ public class DbServiceHibernateImpl implements DbService {
 
     @Override
     public <T extends DataSet> T load(long id, Class<T> clazz) {
+        Element<String, DataSet> element = cache.get(clazz.getName() + id);
+        if (element != null) {
+            if (element.getValue().getClass().equals(clazz)) {
+                element.setAccessTime();
+                return (T) element.getValue();
+            } else {
+                /* TBD error*/
+            }
+        }
         Executor exec = new Executor(sessionFactory);
-        return (T) exec.execute(session -> {
+        T data = (T) exec.execute(session -> {
             DataSetDao dao = DaoManager.getDao(clazz);
             dao.setSession(session);
             return dao.read(id);
         });
+
+        cache.put(new Element<>(clazz.getName() + data.getId(), data));
+        return data;
     }
 
     public <T extends DataSet> T read(String name, Class<T> clazz) {
         Executor exec = new Executor(sessionFactory);
-        return (T) exec.execute(session -> {
+        T data = (T) exec.execute(session -> {
             DataSetDao dao = DaoManager.getDao(clazz);
             dao.setSession(session);
             return dao.read(name);
         });
+        cache.put(new Element<>(clazz.getName() + data.getId(), data));
+        return data;
     }
 
     public <T extends DataSet> List<T> readAll(Class<T> clazz) {
@@ -94,6 +113,10 @@ public class DbServiceHibernateImpl implements DbService {
             System.out.println("Closed");
         } else {
             System.out.println("SessionFactory is null.");
+        }
+
+        if (cache != null) {
+            cache.dispose();
         }
     }
 }
