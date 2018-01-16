@@ -36,33 +36,45 @@ public class DbServiceImplTest {
         user.setPhones(phones);
         ds.save(user);
 
-        UserDataSet userRead = ds.load(1, UserDataSet.class);
+        long startTime = System.currentTimeMillis();
+        UserDataSet userRead1 = ds.load(1, UserDataSet.class);
+        long endTime = System.currentTimeMillis();
 
-        if (userRead == null) {
+        long duration1 = endTime - startTime;
+
+        System.out.println("duration1: " + duration1);
+
+        if (userRead1 == null) {
             fail();
         }
 
-        assertEquals(userRead.getName(), user.getName());
-        assertEquals(userRead.getAge(), user.getAge());
-        assertEquals(userRead.getAddress().getStreet(), user.getAddress().getStreet());
+        startTime = System.currentTimeMillis();
+        UserDataSet userRead2 = ds.load(1, UserDataSet.class);
+        endTime = System.currentTimeMillis();
 
-        assertTrue(CollectionUtils.isEqualCollection(
-                userRead.getPhones().stream().map(p -> p.getNumber()).collect(Collectors.toList()),
-                user.getPhones().stream().map(p -> p.getNumber()).collect(Collectors.toList())));
+        long duration2 = endTime - startTime;
 
-        AddressDataSet addressRead = ds.read(street, AddressDataSet.class);
-
-        if (addressRead == null) {
+        if (userRead2 == null) {
             fail();
         }
 
-        assertEquals(addressRead.getStreet(), address.getStreet());
+        System.out.println("duration2: " + duration2);
 
-        List<PhoneDataSet> phonesRead = ds.readAll(PhoneDataSet.class);
+        assertEquals(userRead1.getName(), userRead2.getName());
+        assertEquals(userRead1.getAge(), userRead2.getAge());
+        assertEquals(userRead1.getAddress().getStreet(), userRead2.getAddress().getStreet());
 
         assertTrue(CollectionUtils.isEqualCollection(
-                phonesRead.stream().map(p -> p.getNumber()).collect(Collectors.toList()),
-                phones.stream().map(p -> p.getNumber()).collect(Collectors.toList())));
+                userRead1.getPhones().stream().map(p -> p.getNumber()).collect(Collectors.toList()),
+                userRead2.getPhones().stream().map(p -> p.getNumber()).collect(Collectors.toList())));
+
+        assertTrue(duration1 > duration2);
+
+        long startNano = System.nanoTime();
+        UserDataSet userRead3 = ds.load(1, UserDataSet.class);
+        long endNano = System.nanoTime();
+
+        System.out.println("durationNano: " + (endNano - startNano));
 
     }
 

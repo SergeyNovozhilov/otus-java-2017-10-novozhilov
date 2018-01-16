@@ -27,7 +27,7 @@ public class DbServiceHibernateImpl implements DbService {
     private final Cache<String, DataSet> cache;
 
     public DbServiceHibernateImpl() {
-        cache = new CacheImpl<>(5, 1000, 1000, false);
+        cache = new CacheImpl<>(5, 1000, 10000, false);
         Configuration configuration = new Configuration();
 
         configuration.addAnnotatedClass(AddressDataSet.class);
@@ -68,12 +68,8 @@ public class DbServiceHibernateImpl implements DbService {
     public <T extends DataSet> T load(long id, Class<T> clazz) {
         Element<String, DataSet> element = cache.get(clazz.getName() + id);
         if (element != null) {
-            if (element.getValue().getClass().equals(clazz)) {
                 element.setAccessTime();
                 return (T) element.getValue();
-            } else {
-                /* TBD error*/
-            }
         }
         Executor exec = new Executor(sessionFactory);
         T data = (T) exec.execute(session -> {
