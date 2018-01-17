@@ -47,7 +47,7 @@ public class CacheImplTest {
         cache.put(el2);
         cache.put(el3);
 
-        sleep();
+        sleep(100);
 
         Element<Integer, String> elRead = cache.get(1);
 
@@ -55,7 +55,7 @@ public class CacheImplTest {
             fail();
         }
 
-        sleep();
+        sleep(100);
 
         elRead = cache.get(3);
 
@@ -79,9 +79,9 @@ public class CacheImplTest {
 
     }
 
-    private void sleep() {
+    private void sleep(int ms) {
         try {
-            Thread.sleep(100);
+            Thread.sleep(ms);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -100,17 +100,53 @@ public class CacheImplTest {
             fail();
         }
 
-        try {
-            Thread.sleep(1100);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            fail();
-        }
+        sleep(1100);
+
 
         elRead = cache.get(1);
         if (elRead != null) {
             fail();
         }
+    }
+
+    @Test
+    public void test4() {
+        System.out.println("CacheImplTest: test4");
+        Element<Integer, String> el1 = new Element<>(1, "one");
+        Element<Integer, String> el2 = new Element<>(2, "one");
+
+        cache.put(el1);
+        cache.put(el2);
+
+
+        Element<Integer, String> elRead1 = cache.get(1);
+
+        if (elRead1 == null) {
+            fail();
+        }
+
+        sleep(200);
+
+        Element<Integer, String> elRead2 = cache.get(2);
+
+        if (elRead2 == null) {
+            fail();
+        }
+
+        sleep(500);
+
+
+        elRead1 = cache.get(1);
+        if (elRead1 != null) {
+            fail();
+        }
+
+        elRead2 = cache.get(2);
+
+        if (elRead2 == null) {
+            fail();
+        }
+
     }
 
     @After
