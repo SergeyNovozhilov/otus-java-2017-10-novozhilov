@@ -5,9 +5,6 @@ import java.util.*;
 import java.util.function.Function;
 
 public class CacheImpl<K, V> implements Cache<K, V> {
-
-    private static final int TIME_THRESHOLD_MS = 5;
-
     private final int maxElements;
     private final long lifeTimeMs;
     private final long idleTimeMs;
