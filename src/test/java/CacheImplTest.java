@@ -14,7 +14,7 @@ public class CacheImplTest {
 
     @Before
     public void setUp() {
-        cache = new CacheImpl(3, 1000, 10000, false);
+        cache = new CacheImpl(3, 1000, 600, false);
     }
 
     @Test
