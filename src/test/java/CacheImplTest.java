@@ -18,7 +18,7 @@ public class CacheImplTest {
     }
 
     @Test
-    public void test1() {
+    public void testPutGet() {
         System.out.println("CacheImplTest: test1");
         Element<Integer, String> el = new Element<>(1, "one");
 
@@ -35,7 +35,7 @@ public class CacheImplTest {
     }
 
     @Test
-    public void test2() {
+    public void testMax() {
         System.out.println("CacheImplTest: test2");
 
         Element<Integer, String> el1 = new Element<>(1, "one");
@@ -79,7 +79,7 @@ public class CacheImplTest {
 
     }
 
-    private void sleep(int ms) {
+    private void sleep(long ms) {
         try {
             Thread.sleep(ms);
         } catch (InterruptedException e) {
@@ -88,7 +88,7 @@ public class CacheImplTest {
     }
 
     @Test
-    public void test3() {
+    public void testLifeTime() {
         System.out.println("CacheImplTest: test3");
         Element<Integer, String> el = new Element<>(1, "one");
 
@@ -110,7 +110,7 @@ public class CacheImplTest {
     }
 
     @Test
-    public void test4() {
+    public void testIdleTime() {
         System.out.println("CacheImplTest: test4");
         Element<Integer, String> el1 = new Element<>(1, "one");
         Element<Integer, String> el2 = new Element<>(2, "one");
