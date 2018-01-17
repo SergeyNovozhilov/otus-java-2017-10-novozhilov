@@ -19,7 +19,7 @@ public class CacheImplTest {
 
     @Test
     public void testPutGet() {
-        System.out.println("CacheImplTest: test1");
+        System.out.println("CacheImplTest: testPutGet");
         Element<Integer, String> el = new Element<>(1, "one");
 
         cache.put(el);
@@ -89,10 +89,12 @@ public class CacheImplTest {
 
     @Test
     public void testLifeTime() {
-        System.out.println("CacheImplTest: test3");
+        System.out.println("CacheImplTest: testLifeTime");
         Element<Integer, String> el = new Element<>(1, "one");
 
         cache.put(el);
+
+        sleep(100);
 
         Element<Integer, String> elRead = cache.get(1);
 
@@ -111,7 +113,7 @@ public class CacheImplTest {
 
     @Test
     public void testIdleTime() {
-        System.out.println("CacheImplTest: test4");
+        System.out.println("CacheImplTest: testIdleTime");
         Element<Integer, String> el1 = new Element<>(1, "one");
         Element<Integer, String> el2 = new Element<>(2, "one");
 
@@ -136,14 +138,14 @@ public class CacheImplTest {
         sleep(500);
 
 
-        elRead1 = cache.get(1);
-        if (elRead1 != null) {
+        elRead2 = cache.get(2);
+        if (elRead2 == null) {
             fail();
         }
 
-        elRead2 = cache.get(2);
+        elRead1 = cache.get(1);
 
-        if (elRead2 == null) {
+        if (elRead1 != null) {
             fail();
         }
 
