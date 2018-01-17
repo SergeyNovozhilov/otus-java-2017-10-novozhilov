@@ -55,7 +55,7 @@ public class CacheImpl<K, V> implements Cache<K, V> {
                 boolean toRemove = false;
                 if (ref != null) {
                     Element<K, V> element = ref.get();
-                    if (element == null || isT1BeforeT2(timeFunction.apply(element), System.currentTimeMillis())) {
+                    if (element == null || (timeFunction.apply(element) < System.currentTimeMillis())) {
                         toRemove = true;
                     }
                 } else {
@@ -67,11 +67,6 @@ public class CacheImpl<K, V> implements Cache<K, V> {
                 }
             }
         };
-    }
-
-
-    private boolean isT1BeforeT2(long t1, long t2) {
-        return t1 < t2 + TIME_THRESHOLD_MS;
     }
 
     @Override

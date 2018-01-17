@@ -27,7 +27,7 @@ public class DbServiceHibernateImpl implements DbService {
     private final Cache<String, DataSet> cache;
 
     public DbServiceHibernateImpl() {
-        cache = new CacheImpl<>(5, 1000, 10000, false);
+        cache = new CacheImpl<>(5, 1000, 600, false);
         Configuration configuration = new Configuration();
 
         configuration.addAnnotatedClass(AddressDataSet.class);
