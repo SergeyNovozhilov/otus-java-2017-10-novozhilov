@@ -11,8 +11,8 @@ import java.util.List;
 public class UserDataSetDao extends DataSetDao<UserDataSet> {
 
     @Override
-    public void save(UserDataSet dataSet)  {
-        getSession().save(dataSet);
+    public long save(UserDataSet dataSet)  {
+        return (long)getSession().save(dataSet);
     }
 
     @Override

@@ -1,26 +1,21 @@
 package ru.otus.DbService;
 
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 import ru.otus.Dao.DataSetDao;
-import ru.otus.Dao.UserDataSetDao;
+import ru.otus.DaoManager.DaoManager;
 import ru.otus.DataSet.AddressDataSet;
 import ru.otus.DataSet.DataSet;
 import ru.otus.DataSet.PhoneDataSet;
 import ru.otus.DataSet.UserDataSet;
 import ru.otus.Executor.Executor;
-import ru.otus.DaoManager.DaoManager;
 import ru.otus.cache.Cache;
 import ru.otus.cache.CacheImpl;
 import ru.otus.cache.Element;
 
-import java.sql.SQLException;
 import java.util.List;
-import java.util.function.Function;
 
 public class DbServiceHibernateImpl implements DbService {
     private final SessionFactory sessionFactory;
@@ -56,12 +51,13 @@ public class DbServiceHibernateImpl implements DbService {
     @Override
     public <T extends DataSet> void save(T object) {
         Executor exec = new Executor(sessionFactory);
-        exec.execute(session -> {
+        long id = exec.execute(session -> {
             DataSetDao dao = DaoManager.getDao(object.getClass());
             dao.setSession(session);
-            dao.save(object);
-            return null;
+            return dao.save(object);
         });
+        object.setId(id);
+        cache.put(new Element<>(object.getClass().getName() + object.getId(), object));
     }
 
     @Override

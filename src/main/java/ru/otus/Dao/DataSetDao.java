@@ -16,7 +16,7 @@ public abstract class DataSetDao <T extends DataSet> {
         return session;
     }
 
-    public abstract void save(T dataSet);
+    public abstract long save(T dataSet);
 
     public abstract T read(long id);
 

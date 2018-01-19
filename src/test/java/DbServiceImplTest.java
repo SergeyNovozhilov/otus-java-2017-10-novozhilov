@@ -48,6 +48,12 @@ public class DbServiceImplTest {
             fail();
         }
 
+        try {
+            Thread.sleep(1100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         startTime = System.currentTimeMillis();
         UserDataSet userRead2 = ds.load(1, UserDataSet.class);
         endTime = System.currentTimeMillis();
@@ -68,7 +74,7 @@ public class DbServiceImplTest {
                 userRead1.getPhones().stream().map(p -> p.getNumber()).collect(Collectors.toList()),
                 userRead2.getPhones().stream().map(p -> p.getNumber()).collect(Collectors.toList())));
 
-        assertTrue(duration1 > duration2);
+        assertTrue(duration1 < duration2);
 
         long startNano = System.nanoTime();
         UserDataSet userRead3 = ds.load(1, UserDataSet.class);
