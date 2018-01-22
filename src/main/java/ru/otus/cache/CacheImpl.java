@@ -10,7 +10,7 @@ public class CacheImpl<K, V> implements Cache<K, V> {
     private final long idleTimeMs;
     private final boolean isEternal;
 
-    private final Map<K, SoftReference<Element<K, V>>> elements = new HashMap<>();
+    private  Map<K, SoftReference<Element<K, V>>> elements = new HashMap<>();
     private final Timer timer = new Timer();
 
     private int hit = 0;
@@ -95,6 +95,7 @@ public class CacheImpl<K, V> implements Cache<K, V> {
     @Override
     public void dispose() {
         timer.cancel();
+        elements = null;
     }
 
     private void removeElement() {

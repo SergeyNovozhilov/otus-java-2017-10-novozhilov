@@ -14,7 +14,7 @@ public class CacheImplTest {
 
     @Before
     public void setUp() {
-        cache = new CacheImpl(3, 1000, 600, false);
+        cache = new CacheImpl(3, 1000, 800, false);
     }
 
     @Test
@@ -36,7 +36,7 @@ public class CacheImplTest {
 
     @Test
     public void testMax() {
-        System.out.println("CacheImplTest: test2");
+        System.out.println("CacheImplTest: testMax");
 
         Element<Integer, String> el1 = new Element<>(1, "one");
         Element<Integer, String> el2 = new Element<>(2, "one");
@@ -94,7 +94,7 @@ public class CacheImplTest {
 
         cache.put(el);
 
-        sleep(100);
+        sleep(400);
 
         Element<Integer, String> elRead = cache.get(1);
 
@@ -102,7 +102,7 @@ public class CacheImplTest {
             fail();
         }
 
-        sleep(1100);
+        sleep(700);
 
 
         elRead = cache.get(1);
