@@ -99,6 +99,11 @@ public class DbServiceHibernateImpl implements DbService {
     }
 
     @Override
+    public Cache getCache() {
+        return cache;
+    }
+
+    @Override
     public void close() {
         if (sessionFactory != null) {
             sessionFactory.close();
