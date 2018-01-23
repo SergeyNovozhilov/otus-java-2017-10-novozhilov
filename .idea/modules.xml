@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/HW-parent/HW-parent.iml" filepath="$PROJECT_DIR$/HW-parent/HW-parent.iml" group="HW10/1" />
+      <module fileurl="file://$PROJECT_DIR$/HW10.1.1.iml" filepath="$PROJECT_DIR$/HW10.1.1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/database/database.iml" filepath="$PROJECT_DIR$/database/database.iml" group="HW10/1" />
+      <module fileurl="file://$PROJECT_DIR$/web/web.iml" filepath="$PROJECT_DIR$/web/web.iml" group="HW10/1" />
+    </modules>
+  </component>
+</project>
