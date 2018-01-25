@@ -22,8 +22,8 @@ public class AdminServlet extends HttpServlet {
         pageVariables.put("parameters", request.getParameterMap().toString());
 
         //let's get login from session
-        String login = (String) request.getSession().getAttribute(LoginServlet.LOGIN_PARAMETER_NAME);
-        pageVariables.put("login", login != null ? login : DEFAULT_USER_NAME);
+//        String login = (String) request.getSession().getAttribute(LoginServlet.LOGIN_PARAMETER_NAME);
+//        pageVariables.put("login", login != null ? login : DEFAULT_USER_NAME);
 
         return pageVariables;
     }

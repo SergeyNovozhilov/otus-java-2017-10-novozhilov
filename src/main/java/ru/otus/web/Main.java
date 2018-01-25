@@ -6,6 +6,8 @@ import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+import ru.otus.web.servlet.AdminServlet;
+import ru.otus.web.servlet.LoginServlet;
 
 public class Main {
 
@@ -17,9 +19,8 @@ public class Main {
         resourceHandler.setResourceBase(PUBLIC);
 
 
-//        context.addServlet(new ServletHolder(new LoginServlet("anonymous")), "/login");
-//        context.addServlet(AdminServlet.class, "/admin");
-//        context.addServlet(TimerServlet.class, "/timer");
+        context.addServlet(new ServletHolder(new LoginServlet()), "/login");
+        context.addServlet(AdminServlet.class, "/admin");
 
         Server server = new Server(PORT);
         server.setHandler(new HandlerList(resourceHandler, context));

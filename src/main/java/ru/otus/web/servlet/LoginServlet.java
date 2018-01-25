@@ -20,15 +20,15 @@ public class LoginServlet extends HttpServlet {
 
     private static final String ADMIN_AUTHORIZATION = "YWRtaW46YWRtaW4=";
 
-    private static final String LOGIN_VARIABLE_NAME = "login";
+    private static final String MESSAGE_VARIABLE = "message";
     private static final String LOGIN_PAGE = "login.html";
     private static final String ADMIN_PAGE = "admin.html";
 
 
-    private static String getPage(String login) throws IOException {
+    private static String getPage(String page, String message) throws IOException {
         Map<String, Object> pageVariables = new HashMap<>();
-        pageVariables.put(LOGIN_VARIABLE_NAME, login == null ? "" : login);
-        return TemplateProcessor.instance().getPage(LOGIN_PAGE_TEMPLATE, pageVariables);
+        pageVariables.put(MESSAGE_VARIABLE, message);
+        return TemplateProcessor.instance().getPage(page, pageVariables);
     }
 
     public void doGet(HttpServletRequest request,
@@ -38,28 +38,36 @@ public class LoginServlet extends HttpServlet {
 
     public void doPost(HttpServletRequest request,
                        HttpServletResponse response) throws ServletException, IOException {
+        String pageName = LOGIN_PAGE;
+        String message = "";
+
         String requestLogin = request.getParameter(LOGIN_PARAMETER);
         String requestPassword = request.getParameter(PASSWORD_PARAMETER);
 
-        String auth = requestLogin + ":" + requestPassword;
-
-        String encoded = new String(Base64.getEncoder().encode(auth.getBytes()));
-
-        if (StringUtils.equals(ADMIN_AUTHORIZATION, encoded)) {
-
-        } else {
-
-        }
-
-
         if (requestLogin != null) {
-            saveToVariable(requestLogin);
-            saveToSession(request, requestLogin); //request.getSession().getAttribute("login");
-            saveToServlet(request, requestLogin); //request.getAttribute("login");
-            saveToCookie(response, requestLogin); //request.getCookies();
+
+
+            String auth = requestLogin + ":" + requestPassword;
+
+            String encoded = new String(Base64.getEncoder().encode(auth.getBytes()));
+
+            if (StringUtils.equals(ADMIN_AUTHORIZATION, encoded)) {
+                pageName = ADMIN_PAGE;
+            } else {
+                message = "User " + requestLogin + " is not authorized to admin page";
+            }
+
+
+            if (requestLogin != null) {
+//            saveToVariable(requestLogin);
+                saveToSession(request, requestLogin); //request.getSession().getAttribute("login");
+                saveToServlet(request, requestLogin); //request.getAttribute("login");
+                saveToCookie(response, requestLogin); //request.getCookies();
+            }
+
         }
 
-        String page = getPage(login); //save to the page
+        String page = getPage(pageName, message); //save to the page
         response.getWriter().println(page);
 
         setOK(response);
@@ -77,9 +85,9 @@ public class LoginServlet extends HttpServlet {
         request.getSession().setAttribute("login", requestLogin);
     }
 
-    private void saveToVariable(String requestLogin) {
-        login = requestLogin != null ? requestLogin : login;
-    }
+//    private void saveToVariable(String requestLogin) {
+//        login = requestLogin != null ? requestLogin : login;
+//    }
 
     private void setOK(HttpServletResponse response) {
         response.setContentType("text/html;charset=utf-8");
