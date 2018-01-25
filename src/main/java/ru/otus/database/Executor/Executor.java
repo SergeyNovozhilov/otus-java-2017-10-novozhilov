@@ -1,11 +1,9 @@
-package ru.otus.Executor;
+package ru.otus.database.Executor;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import ru.otus.DataSet.DataSet;
 
-import java.sql.SQLException;
 import java.util.function.Function;
 
 public class Executor {

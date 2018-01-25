@@ -1,16 +1,16 @@
-package ru.otus.DbService;
+package ru.otus.database.DbService;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
-import ru.otus.Dao.DataSetDao;
-import ru.otus.DaoManager.DaoManager;
-import ru.otus.DataSet.AddressDataSet;
-import ru.otus.DataSet.DataSet;
-import ru.otus.DataSet.PhoneDataSet;
-import ru.otus.DataSet.UserDataSet;
-import ru.otus.Executor.Executor;
+import ru.otus.database.Dao.DataSetDao;
+import ru.otus.database.DaoManager.DaoManager;
+import ru.otus.database.DataSet.AddressDataSet;
+import ru.otus.database.DataSet.DataSet;
+import ru.otus.database.DataSet.PhoneDataSet;
+import ru.otus.database.DataSet.UserDataSet;
+import ru.otus.database.Executor.Executor;
 import ru.otus.cache.Cache;
 import ru.otus.cache.CacheImpl;
 import ru.otus.cache.Element;

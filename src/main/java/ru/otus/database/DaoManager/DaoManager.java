@@ -1,10 +1,10 @@
-package ru.otus.DaoManager;
+package ru.otus.database.DaoManager;
 
-import ru.otus.Dao.AddressDataSetDao;
-import ru.otus.Dao.DataSetDao;
-import ru.otus.Dao.PhoneDataSetDao;
-import ru.otus.Dao.UserDataSetDao;
-import ru.otus.DataSet.DataSet;
+import ru.otus.database.Dao.AddressDataSetDao;
+import ru.otus.database.Dao.DataSetDao;
+import ru.otus.database.Dao.PhoneDataSetDao;
+import ru.otus.database.Dao.UserDataSetDao;
+import ru.otus.database.DataSet.DataSet;
 
 public class DaoManager {
     public static <T extends DataSet> DataSetDao getDao(Class<T> clazz) {

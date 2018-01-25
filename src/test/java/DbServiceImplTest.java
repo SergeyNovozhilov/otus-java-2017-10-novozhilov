@@ -1,13 +1,12 @@
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import ru.otus.DataSet.AddressDataSet;
-import ru.otus.DataSet.PhoneDataSet;
-import ru.otus.DataSet.UserDataSet;
-import ru.otus.DbService.DbService;
-import ru.otus.DbService.DbServiceHibernateImpl;
+import ru.otus.database.DataSet.AddressDataSet;
+import ru.otus.database.DataSet.PhoneDataSet;
+import ru.otus.database.DataSet.UserDataSet;
+import ru.otus.database.DbService.DbService;
+import ru.otus.database.DbService.DbServiceHibernateImpl;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;

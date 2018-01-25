@@ -1,6 +1,6 @@
-package ru.otus.DbService;
+package ru.otus.database.DbService;
 
-import ru.otus.DataSet.DataSet;
+import ru.otus.database.DataSet.DataSet;
 
 import java.util.List;
 

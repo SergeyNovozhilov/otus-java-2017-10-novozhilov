@@ -1,7 +1,7 @@
-package ru.otus.Dao;
+package ru.otus.database.Dao;
 
 import org.hibernate.Session;
-import ru.otus.DataSet.DataSet;
+import ru.otus.database.DataSet.DataSet;
 
 import java.util.List;
 
