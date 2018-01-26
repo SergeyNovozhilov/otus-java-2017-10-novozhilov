@@ -1,36 +1,33 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-    <meta charset="UTF-8"/>
-    <title>Admin</title>
-</head>
-<body>
-<div class="top">
-    <img src="logo.png"/>
-    <br/>
-	<form action="/admin" method="GET">
-        <input type="submit" value="Get cache data">
-    </form>
-</div>
+    <head>
+        <meta charset="UTF-8"/>
+        <title>Admin</title>
+    </head>
+    <body>
+        <div class="top">
+            <img src="logo.png"/>
+            <br/>
+            <form action="/admin" method="GET">
+                <input type="submit" value="Get cache data">
+            </form>
+        </div>
 
-pageVariables.put("hit", cache.getHit());
-        pageVariables.put("miss", cache.getMiss());
-        pageVariables.put("lifeTime", cache.getLifeTime());
-        pageVariables.put("idleTime", cache.getIdleTime());
+        <#if lifeTime??>
+          <p>LifeTime: ${lifeTime} ms</p>
+        </#if>
+        <#if idleTime??>
+          <p>IdleTime: ${idleTime} ms</p>
+        </#if>
+        <#if hit??>
+           <p>Hit: ${hit}</p>
+        </#if>
+        <#if miss??>
+           <p>Miss: ${miss}</p>
+        </#if>
+        <#if max??>
+        <p>Max: ${max} elements</p>
+        </#if>
 
-<#if lifeTime??>
-  <p>LifeTime: ${lifeTime}</p>
-</#if>
-<#if idleTime??>
-  <p>IdleTime: ${idleTime}</p>
-</#if>
-<#if hit??>
-   <p>Hit: ${hit}</p>
-</#if>
-<#if miss??>
-   <p>Miss: ${miss}</p>
-</#if>
-
-
-</body>
+    </body>
 </html>

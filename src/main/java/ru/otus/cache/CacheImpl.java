@@ -93,6 +93,21 @@ public class CacheImpl<K, V> implements Cache<K, V> {
     }
 
     @Override
+    public long getLifeTime() {
+        return lifeTimeMs;
+    }
+
+    @Override
+    public long getIdleTime() {
+        return idleTimeMs;
+    }
+
+    @Override
+    public int getMax() {
+        return maxElements;
+    }
+
+    @Override
     public void dispose() {
         timer.cancel();
         elements = null;

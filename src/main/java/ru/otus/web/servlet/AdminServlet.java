@@ -1,5 +1,7 @@
 package ru.otus.web.servlet;
 
+import ru.otus.cache.Cache;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -21,18 +23,18 @@ public class AdminServlet extends HttpServlet {
         this.cache = cache;
     }
 
-    private static Map<String, Object> createPageVariablesMap() {
+    private Map<String, Object> createPageVariablesMap() {
         Map<String, Object> pageVariables = new HashMap<>();
-        pageVariables.put("hit", cache.getHit());
-        pageVariables.put("miss", cache.getMiss());
+        pageVariables.put("hit", cache.getHitCount());
+        pageVariables.put("miss", cache.getMissCount());
         pageVariables.put("lifeTime", cache.getLifeTime());
         pageVariables.put("idleTime", cache.getIdleTime());
-
+        pageVariables.put("max", cache.getMax());
 
         return pageVariables;
     }
 
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         Map<String, Object> pageVariables = createPageVariablesMap();
 

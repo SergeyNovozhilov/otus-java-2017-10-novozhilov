@@ -11,5 +11,11 @@ public interface Cache<K, V>{
 
     int getMissCount();
 
+    long getLifeTime();
+
+    long getIdleTime();
+
+    int getMax();
+
     void dispose();
 }
