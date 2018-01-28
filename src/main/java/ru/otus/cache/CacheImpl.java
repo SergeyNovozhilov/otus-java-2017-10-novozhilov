@@ -70,6 +70,7 @@ public class CacheImpl<K, V> implements Cache<K, V> {
     public Element<K, V> get(K key) {
         SoftReference<Element<K, V>> ref = elements.get(key);
         if (ref == null) {
+            miss++;
             return null;
         }
         Element<K, V> element = ref.get();
