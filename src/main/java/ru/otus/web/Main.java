@@ -48,7 +48,7 @@ public class Main {
     }
 
     private static void setDb(DbService ds) {
-        ds = new DbServiceHibernateImpl();
+        System.out.println("setDb");
 
         String street = "Ark street";
         AddressDataSet address = new AddressDataSet(street);
