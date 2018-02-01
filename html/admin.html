@@ -8,9 +8,13 @@
         <div class="top">
             <img src="logo.png"/>
             <br/>
-            <form action="/admin" method="GET">
-                <input type="submit" value="Get cache data">
-            </form>
+            <#if message??>
+                <p>${message}</p>
+            <#else>
+                <form action="/admin" method="GET">
+                    <input type="submit" value="Get cache data">
+                </form>
+            </#if>
         </div>
 
         <#if lifeTime??>
