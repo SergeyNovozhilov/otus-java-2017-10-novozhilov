@@ -51,7 +51,6 @@ public class LoginServlet extends HttpServlet {
                 message = "User " + requestLogin + " is not authorized to admin page";
             }
             saveToSession(request, requestLogin, requestPassword);
-
         }
 
         String page = getPage(pageName, message);

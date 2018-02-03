@@ -39,7 +39,6 @@ public class AdminServlet extends HttpServlet {
 
         if (requestLogin == null || requestPassword == null) {
             response.getWriter().println(TemplateProcessor.instance().getPage(LoginServlet.LOGIN_PAGE, null));
-
         } else {
             Map<String, Object> pageVariables;
             if (LoginServlet.checkAdmin(requestLogin, requestPassword)) {
