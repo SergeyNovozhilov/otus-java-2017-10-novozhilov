@@ -4,6 +4,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
+import org.springframework.stereotype.Service;
 import ru.otus.database.Dao.DataSetDao;
 import ru.otus.database.DaoManager.DaoManager;
 import ru.otus.database.DataSet.AddressDataSet;
@@ -17,6 +18,7 @@ import ru.otus.cache.Element;
 
 import java.util.List;
 
+@Service
 public class DbServiceHibernateImpl implements DbService {
     private final SessionFactory sessionFactory;
     private final Cache<String, DataSet> cache;

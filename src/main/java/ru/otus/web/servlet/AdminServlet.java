@@ -1,6 +1,8 @@
 package ru.otus.web.servlet;
 
-import ru.otus.cache.Cache;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import ru.otus.database.DbService.DbService;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -9,23 +11,21 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-
+@Component
 public class AdminServlet extends HttpServlet {
 
-    private final Cache cache;
+    @Autowired
+    private DbService db;
 
-    public AdminServlet(Cache cache) {
-        this.cache = cache;
-    }
 
     private Map<String, Object> createPageVariablesMap(String message) {
         Map<String, Object> pageVariables = new HashMap<>();
         if (message == null) {
-            pageVariables.put("hit", cache.getHitCount());
-            pageVariables.put("miss", cache.getMissCount());
-            pageVariables.put("lifeTime", cache.getLifeTime());
-            pageVariables.put("idleTime", cache.getIdleTime());
-            pageVariables.put("max", cache.getMax());
+            pageVariables.put("hit", db.getCache().getHitCount());
+            pageVariables.put("miss", db.getCache().getMissCount());
+            pageVariables.put("lifeTime", db.getCache().getLifeTime());
+            pageVariables.put("idleTime", db.getCache().getIdleTime());
+            pageVariables.put("max", db.getCache().getMax());
         } else {
             pageVariables.put("message", message);
         }
