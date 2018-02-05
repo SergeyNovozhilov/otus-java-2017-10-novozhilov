@@ -14,7 +14,8 @@ import java.util.Map;
  * @author v.chibrikov
  */
 class TemplateProcessor {
-    private static final String HTML_DIR = "html";
+    private static final String HTML_DIR = "WEB-INF/html";
+    private static final String SEPARATOR = "/";
     private static TemplateProcessor instance = new TemplateProcessor();
 
     private final Configuration configuration;
@@ -29,7 +30,7 @@ class TemplateProcessor {
 
     String getPage(String filename, Map<String, Object> data) throws IOException {
         try (Writer stream = new StringWriter()) {
-            Template template = configuration.getTemplate(HTML_DIR + File.separator + filename);
+            Template template = configuration.getTemplate(HTML_DIR + SEPARATOR + filename);
             template.process(data, stream);
             return stream.toString();
         } catch (TemplateException e) {

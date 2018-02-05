@@ -1,7 +1,6 @@
 package ru.otus.web.servlet;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -12,7 +11,6 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
-@Component
 public class LoginServlet extends HttpServlet {
 
     public static final String LOGIN_PARAMETER = "login";

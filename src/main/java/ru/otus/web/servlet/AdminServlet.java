@@ -1,7 +1,7 @@
 package ru.otus.web.servlet;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import ru.otus.database.DataSet.AddressDataSet;
 import ru.otus.database.DataSet.PhoneDataSet;
 import ru.otus.database.DataSet.UserDataSet;
@@ -17,9 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Component
 public class AdminServlet extends HttpServlet {
-
 
     private final DbService db;
 
@@ -31,7 +29,7 @@ public class AdminServlet extends HttpServlet {
     @Override
     public void init() throws ServletException {
         super.init();
-
+        SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
     }
 
     private Map<String, Object> createPageVariablesMap(String message) {
