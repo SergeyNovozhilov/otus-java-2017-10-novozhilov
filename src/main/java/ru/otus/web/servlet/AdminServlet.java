@@ -7,6 +7,7 @@ import ru.otus.database.DataSet.PhoneDataSet;
 import ru.otus.database.DataSet.UserDataSet;
 import ru.otus.database.DbService.DbService;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -19,16 +20,13 @@ import java.util.Map;
 
 public class AdminServlet extends HttpServlet {
 
-    private final DbService db;
-
     @Autowired
-    public AdminServlet(DbService db) {
-        this.db = db;
-    }
+    private DbService db;
+
 
     @Override
-    public void init() throws ServletException {
-        super.init();
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
         SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
     }
 
@@ -47,7 +45,6 @@ public class AdminServlet extends HttpServlet {
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
         String requestLogin = (String) request.getSession().getAttribute(LoginServlet.LOGIN_PARAMETER);
         String requestPassword = (String) request.getSession().getAttribute(LoginServlet.PASSWORD_PARAMETER);
 

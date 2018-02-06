@@ -10,11 +10,9 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Map;
 
-/**
- * @author v.chibrikov
- */
+
 class TemplateProcessor {
-    private static final String HTML_DIR = "WEB-INF/html";
+    private static final String HTML_DIR = "/html";
     private static final String SEPARATOR = "/";
     private static TemplateProcessor instance = new TemplateProcessor();
 
@@ -22,6 +20,7 @@ class TemplateProcessor {
 
     private TemplateProcessor() {
         configuration = new Configuration();
+        configuration.setClassForTemplateLoading(this.getClass(), HTML_DIR + SEPARATOR);
     }
 
     static TemplateProcessor instance() {
@@ -30,7 +29,7 @@ class TemplateProcessor {
 
     String getPage(String filename, Map<String, Object> data) throws IOException {
         try (Writer stream = new StringWriter()) {
-            Template template = configuration.getTemplate(HTML_DIR + SEPARATOR + filename);
+            Template template = configuration.getTemplate(filename);
             template.process(data, stream);
             return stream.toString();
         } catch (TemplateException e) {

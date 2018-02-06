@@ -100,7 +100,7 @@
     </dependencies>
 
     <build>
-        <finalName>SNHW13.1</finalName>
+        <finalName>app</finalName>
 
         <plugins>
             <plugin>
