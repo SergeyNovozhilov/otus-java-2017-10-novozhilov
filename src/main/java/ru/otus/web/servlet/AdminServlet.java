@@ -45,21 +45,21 @@ public class AdminServlet extends HttpServlet {
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String requestLogin = (String) request.getSession().getAttribute(LoginServlet.LOGIN_PARAMETER);
-        String requestPassword = (String) request.getSession().getAttribute(LoginServlet.PASSWORD_PARAMETER);
+        String requestLogin = (String) request.getSession().getAttribute(Utils.LOGIN_PARAMETER);
+        String requestPassword = (String) request.getSession().getAttribute(Utils.PASSWORD_PARAMETER);
 
         if (requestLogin == null || requestPassword == null) {
-            response.getWriter().println(TemplateProcessor.instance().getPage(LoginServlet.LOGIN_PAGE, null));
+            response.getWriter().println(TemplateProcessor.instance().getPage(Utils.LOGIN_PAGE, null));
         } else {
             Map<String, Object> pageVariables;
-            if (LoginServlet.checkAdmin(requestLogin, requestPassword)) {
+            if (Utils.checkAdmin(requestLogin, requestPassword)) {
                 sebDb(db);
                 pageVariables = createPageVariablesMap(null);
             } else {
                 pageVariables = createPageVariablesMap("User " + requestLogin + " is not authorized to monitor data. ");
             }
 
-            response.getWriter().println(TemplateProcessor.instance().getPage(LoginServlet.ADMIN_PAGE, pageVariables));
+            response.getWriter().println(TemplateProcessor.instance().getPage(Utils.ADMIN_PAGE, pageVariables));
         }
 
         response.setContentType("text/html;charset=utf-8");
