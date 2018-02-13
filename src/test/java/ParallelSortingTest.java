@@ -11,7 +11,7 @@ import static org.junit.Assert.fail;
 public class ParallelSortingTest {
     private Integer[] array;
     private int ARRAY_LENGTH = 12345600;
-    private int THREADS_NUMBER = 2;
+    private int THREADS_NUMBER = 4;
 
     @Before
     public void setUp() {
