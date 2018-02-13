@@ -3,7 +3,6 @@ import org.junit.Before;
 import org.junit.Test;
 import ru.otus.ParallelSorting;
 
-import java.util.Arrays;
 import java.util.Random;
 
 import static org.junit.Assert.fail;
@@ -27,17 +26,15 @@ public class ParallelSortingTest {
     public void testNotReversed() {
         ParallelSorting ps = new ParallelSorting();
         ps.setThreadsNumber(THREADS_NUMBER);
-        Integer[] copy = Arrays.copyOf(array, ARRAY_LENGTH);
-
         try {
-            ps.execute(copy);
-            if (copy == null || copy.length == 0) {
+            ps.execute(array);
+            if (array == null || array.length == 0) {
                 fail();
             }
 
             for (int i = 0; i < ARRAY_LENGTH; i++) {
                 int j = i + 1 < ARRAY_LENGTH ? i + 1 : ARRAY_LENGTH - 1;
-                Assert.assertTrue(copy[i] <= copy[j]);
+                Assert.assertTrue(array[i] <= array[j]);
             }
 
         } catch (InterruptedException e) {
@@ -51,17 +48,16 @@ public class ParallelSortingTest {
         ParallelSorting ps = new ParallelSorting();
         ps.setThreadsNumber(THREADS_NUMBER);
         ps.setReversed(true);
-        Integer[] copy = Arrays.copyOf(array, ARRAY_LENGTH);
 
         try {
-            ps.execute(copy);
-            if (copy == null || copy.length == 0) {
+            ps.execute(array);
+            if (array == null || array.length == 0) {
                 fail();
             }
 
             for (int i = 0; i < ARRAY_LENGTH; i++) {
                 int j = i + 1 < ARRAY_LENGTH ? i + 1 : ARRAY_LENGTH - 1;
-                Assert.assertTrue(copy[i] >= copy[j]);
+                Assert.assertTrue(array[i] >= array[j]);
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
