@@ -11,8 +11,8 @@ import static org.junit.Assert.fail;
 
 public class ParallelSortingTest {
     private Integer[] array;
-    private int ARRAY_LENGTH = 1234;
-    private int THREADS_NUMBER = 5;
+    private int ARRAY_LENGTH = 12345600;
+    private int THREADS_NUMBER = 2;
 
     @Before
     public void setUp() {
@@ -24,7 +24,7 @@ public class ParallelSortingTest {
     }
 
     @Test
-    public void test() {
+    public void testNotReversed() {
         ParallelSorting ps = new ParallelSorting();
         ps.setThreadsNumber(THREADS_NUMBER);
         Integer[] copy = Arrays.copyOf(array, ARRAY_LENGTH);
@@ -38,6 +38,30 @@ public class ParallelSortingTest {
             for (int i = 0; i < ARRAY_LENGTH; i++) {
                 int j = i + 1 < ARRAY_LENGTH ? i + 1 : ARRAY_LENGTH - 1;
                 Assert.assertTrue(copy[i] <= copy[j]);
+            }
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    @Test
+    public void testReversed() {
+        ParallelSorting ps = new ParallelSorting();
+        ps.setThreadsNumber(THREADS_NUMBER);
+        ps.setReversed(true);
+        Integer[] copy = Arrays.copyOf(array, ARRAY_LENGTH);
+
+        try {
+            ps.execute(copy);
+            if (copy == null || copy.length == 0) {
+                fail();
+            }
+
+            for (int i = 0; i < ARRAY_LENGTH; i++) {
+                int j = i + 1 < ARRAY_LENGTH ? i + 1 : ARRAY_LENGTH - 1;
+                Assert.assertTrue(copy[i] >= copy[j]);
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
