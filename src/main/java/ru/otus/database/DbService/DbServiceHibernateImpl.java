@@ -16,6 +16,7 @@ import ru.otus.database.Executor.Executor;
 import ru.otus.cache.Cache;
 import ru.otus.cache.CacheImpl;
 import ru.otus.cache.Element;
+import ru.otus.messageSystem.Address;
 
 import java.util.List;
 
@@ -118,5 +119,15 @@ public class DbServiceHibernateImpl implements DbService {
         if (cache != null) {
             cache.dispose();
         }
+    }
+
+    @Override
+    public Address getAddress() {
+        return null;
+    }
+
+    @Override
+    public String getName() {
+        return null;
     }
 }

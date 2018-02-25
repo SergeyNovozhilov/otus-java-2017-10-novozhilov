@@ -6,6 +6,9 @@ import ru.otus.database.DataSet.AddressDataSet;
 import ru.otus.database.DataSet.PhoneDataSet;
 import ru.otus.database.DataSet.UserDataSet;
 import ru.otus.database.DbService.DbService;
+import ru.otus.messageSystem.Address;
+import ru.otus.messageSystem.Addressee;
+import ru.otus.messageSystem.MessageSystem;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -18,10 +21,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class AdminServlet extends HttpServlet {
+public class AdminServlet extends HttpServlet implements Addressee{
 
     @Autowired
     private DbService db;
+
+    @Autowired
+    private MessageSystem ms;
 
 
     @Override
@@ -98,5 +104,15 @@ public class AdminServlet extends HttpServlet {
         if (userRead3 == null) {
             System.out.println("Error! userRead3 is null");
         }
+    }
+
+    @Override
+    public Address getAddress() {
+        return null;
+    }
+
+    @Override
+    public String getName() {
+        return null;
     }
 }
