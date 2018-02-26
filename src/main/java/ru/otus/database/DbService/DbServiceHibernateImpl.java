@@ -4,6 +4,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import ru.otus.database.Dao.DataSetDao;
@@ -17,13 +18,22 @@ import ru.otus.cache.Cache;
 import ru.otus.cache.CacheImpl;
 import ru.otus.cache.Element;
 import ru.otus.messageSystem.Address;
+import ru.otus.messageSystem.MessageSystem;
 
 import java.util.List;
 
 @Component
 public class DbServiceHibernateImpl implements DbService {
+
+    @Autowired
+    private MessageSystem ms;
+
     private final SessionFactory sessionFactory;
     private final Cache<String, DataSet> cache;
+
+    private final String NAME = "DbService";
+
+    private final Address address = new Address();
 
     public DbServiceHibernateImpl() {
         cache = new CacheImpl<>(5, 1000, 600, false);
@@ -42,6 +52,8 @@ public class DbServiceHibernateImpl implements DbService {
         configuration.setProperty("hibernate.enable_lazy_load_no_trans", "true");
 
         sessionFactory = createSessionFactory(configuration);
+
+        ms.register(this);
     }
 
     private static SessionFactory createSessionFactory(Configuration configuration) {
@@ -123,11 +135,11 @@ public class DbServiceHibernateImpl implements DbService {
 
     @Override
     public Address getAddress() {
-        return null;
+        return address;
     }
 
     @Override
     public String getName() {
-        return null;
+        return NAME;
     }
 }

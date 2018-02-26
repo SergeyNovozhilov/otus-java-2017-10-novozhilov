@@ -29,10 +29,15 @@ public class AdminServlet extends HttpServlet implements Addressee{
     @Autowired
     private MessageSystem ms;
 
+    private final String NAME = "AdminServlet";
+
+    private final Address address = new Address();
+
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
+        ms.register(this);
         SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
     }
 
@@ -108,11 +113,12 @@ public class AdminServlet extends HttpServlet implements Addressee{
 
     @Override
     public Address getAddress() {
-        return null;
+        return address;
     }
 
     @Override
     public String getName() {
-        return null;
+        return NAME;
     }
+
 }

@@ -2,10 +2,10 @@ package ru.otus.messageSystem;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,7 +17,6 @@ import java.util.logging.Logger;
 /**
  * @author tully
  */
-@Slf4j
 @Service
 public final class MessageSystem {
     private final static Logger logger = Logger.getLogger(MessageSystem.class.getName());
@@ -35,8 +34,8 @@ public final class MessageSystem {
 
     public boolean register(Addressee addressee) {
 
-        if (addresseeMap.values().stream().anyMatch(a -> a.equals(addressee))) {
-            logger.log(Level.SEVERE, "Addressee name: " + addressee.getName() + ", address: " + addressee.getAddress().getId() + " already registered");
+        if (addresseeMap.values().stream().anyMatch(a -> a.getAddress().getId().equals(addressee.getAddress().getId()))) {
+            logger.log(Level.SEVERE, "Addressee address: " + addressee.getAddress().getId() + " already registered");
             return false;
         }
 
@@ -54,9 +53,14 @@ public final class MessageSystem {
         return addressee != null ? addressee.getAddress() : null;
     }
 
+    @PostConstruct
+    public void init(){
+        start();
+    }
+
 
     @SuppressWarnings("InfiniteLoopStatement")
-    public void start() {
+    private void start() {
         for (Map.Entry<Address, Addressee> entry : addresseeMap.entrySet()) {
             String name = "MS-worker-" + entry.getKey().getId();
             Thread thread = new Thread(() -> {

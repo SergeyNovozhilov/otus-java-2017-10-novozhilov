@@ -6,5 +6,4 @@ public interface Addressee {
 
     String getName();
 
-    boolean equals(Addressee addressee);
 }
