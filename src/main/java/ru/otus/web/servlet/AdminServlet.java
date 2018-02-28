@@ -2,12 +2,15 @@ package ru.otus.web.servlet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+import ru.otus.app.FrontendServiceMS;
 import ru.otus.database.DataSet.AddressDataSet;
 import ru.otus.database.DataSet.PhoneDataSet;
 import ru.otus.database.DataSet.UserDataSet;
 import ru.otus.database.DbService.DbService;
+import ru.otus.database.DbService.MsgGetData;
 import ru.otus.messageSystem.Address;
 import ru.otus.messageSystem.Addressee;
+import ru.otus.messageSystem.Message;
 import ru.otus.messageSystem.MessageSystem;
 
 import javax.servlet.ServletConfig;
@@ -21,7 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class AdminServlet extends HttpServlet implements Addressee{
+public class AdminServlet extends HttpServlet implements FrontendServiceMS {
 
     @Autowired
     private DbService db;
@@ -33,6 +36,8 @@ public class AdminServlet extends HttpServlet implements Addressee{
 
     private final Address address = new Address();
 
+    private String data;
+
 
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -43,6 +48,7 @@ public class AdminServlet extends HttpServlet implements Addressee{
 
     private Map<String, Object> createPageVariablesMap(String message) {
         Map<String, Object> pageVariables = new HashMap<>();
+        pageVariables.put("data", this.data);
         if (message == null) {
             pageVariables.put("hit", db.getCache().getHitCount());
             pageVariables.put("miss", db.getCache().getMissCount());
@@ -62,6 +68,7 @@ public class AdminServlet extends HttpServlet implements Addressee{
         if (requestLogin == null || requestPassword == null) {
             response.getWriter().println(TemplateProcessor.instance().getPage(Utils.LOGIN_PAGE, null));
         } else {
+            handleRequest();
             Map<String, Object> pageVariables;
             if (Utils.checkAdmin(requestLogin, requestPassword)) {
                 sebDb(db);
@@ -121,4 +128,22 @@ public class AdminServlet extends HttpServlet implements Addressee{
         return NAME;
     }
 
+    @Override
+    public MessageSystem getMS() {
+        return ms;
+    }
+
+    @Override
+    public void handleRequest() {
+        Address db = ms.lookUp("DbService");
+        if (db != null) {
+            Message message = new MsgGetData(getAddress(), db);
+            ms.sendMessage(message);
+        }
+    }
+
+    @Override
+    public void setData(String data) {
+        this.data = data;
+    }
 }

@@ -6,4 +6,5 @@ public interface Addressee {
 
     String getName();
 
+    MessageSystem getMS();
 }

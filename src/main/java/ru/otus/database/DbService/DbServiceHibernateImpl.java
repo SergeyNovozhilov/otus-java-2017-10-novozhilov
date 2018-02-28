@@ -7,6 +7,7 @@ import org.hibernate.service.ServiceRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import ru.otus.app.DBServiceMS;
 import ru.otus.database.Dao.DataSetDao;
 import ru.otus.database.DaoManager.DaoManager;
 import ru.otus.database.DataSet.AddressDataSet;
@@ -23,7 +24,7 @@ import ru.otus.messageSystem.MessageSystem;
 import java.util.List;
 
 @Component
-public class DbServiceHibernateImpl implements DbService {
+public class DbServiceHibernateImpl implements DbService, DBServiceMS {
 
     @Autowired
     private MessageSystem ms;
@@ -141,5 +142,15 @@ public class DbServiceHibernateImpl implements DbService {
     @Override
     public String getName() {
         return NAME;
+    }
+
+    @Override
+    public MessageSystem getMS() {
+        return ms;
+    }
+
+    @Override
+    public String getData() {
+        return "Data through MS";
     }
 }
