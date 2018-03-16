@@ -7,14 +7,13 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LoginServlet extends HttpServlet {
 
-    private static final String MESSAGE_VARIABLE = "message";
+public class LoginServlet extends HttpServlet {
 
 
     private static String getPage(String page, String message) throws IOException {
         Map<String, Object> pageVariables = new HashMap<>();
-        pageVariables.put(MESSAGE_VARIABLE, message);
+        pageVariables.put(Utils.MESSAGE_VARIABLE, message);
         return TemplateProcessor.instance().getPage(page, pageVariables);
     }
 
@@ -33,12 +32,13 @@ public class LoginServlet extends HttpServlet {
 
         if (requestLogin != null && requestPassword != null) {
 
+            saveToSession(request, requestLogin, requestPassword);
             if (Utils.checkAdmin(requestLogin, requestPassword)) {
-                pageName = Utils.ADMIN_PAGE;
+                response.sendRedirect("/app/admin");
             } else {
                 message = "User " + requestLogin + " is not authorized to admin page";
             }
-            saveToSession(request, requestLogin, requestPassword);
+
         }
 
         String page = getPage(pageName, message);

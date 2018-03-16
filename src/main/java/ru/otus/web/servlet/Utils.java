@@ -8,6 +8,8 @@ public class Utils {
     public static final String LOGIN_PARAMETER = "login";
     public static final String PASSWORD_PARAMETER = "password";
 
+    public static final String MESSAGE_VARIABLE = "message";
+
     private static final String ADMIN_AUTHORIZATION = "YWRtaW46YWRtaW4=";
 
     public static final String LOGIN_PAGE = "login.html";

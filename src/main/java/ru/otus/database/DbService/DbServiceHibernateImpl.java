@@ -1,5 +1,6 @@
 package ru.otus.database.DbService;
 
+import com.google.gson.Gson;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import ru.otus.app.DBServiceMS;
+import ru.otus.app.DataObject;
 import ru.otus.database.Dao.DataSetDao;
 import ru.otus.database.DaoManager.DaoManager;
 import ru.otus.database.DataSet.AddressDataSet;
@@ -21,7 +23,11 @@ import ru.otus.cache.Element;
 import ru.otus.messageSystem.Address;
 import ru.otus.messageSystem.MessageSystem;
 
+import javax.annotation.PostConstruct;
+import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Component
 public class DbServiceHibernateImpl implements DbService, DBServiceMS {
@@ -36,6 +42,8 @@ public class DbServiceHibernateImpl implements DbService, DBServiceMS {
 
     private final Address address = new Address();
 
+    private final static Logger log = Logger.getLogger(DbServiceHibernateImpl.class.getName());
+
     public DbServiceHibernateImpl() {
         cache = new CacheImpl<>(5, 1000, 600, false);
         Configuration configuration = new Configuration();
@@ -44,9 +52,9 @@ public class DbServiceHibernateImpl implements DbService, DBServiceMS {
         configuration.addAnnotatedClass(PhoneDataSet.class);
         configuration.addAnnotatedClass(UserDataSet.class);
 
-        configuration.setProperty("hibernate.connection.driver_class", "org.postgresql.Driver");
-        configuration.setProperty("hibernate.connection.url", "jdbc:postgresql://localhost:5433/mydb");
-        configuration.setProperty("hibernate.connection.username", "otus");
+        configuration.setProperty("hibernate.connection.driver_class", "org.h2.Driver");
+        configuration.setProperty("hibernate.connection.url", "jdbc:h2:~/test");
+        configuration.setProperty("hibernate.connection.username", "sa");
         configuration.setProperty("hibernate.connection.password", "");
         configuration.setProperty("hibernate.show_sql", "true");
         configuration.setProperty("hibernate.hbm2ddl.auto", "create");
@@ -54,7 +62,6 @@ public class DbServiceHibernateImpl implements DbService, DBServiceMS {
 
         sessionFactory = createSessionFactory(configuration);
 
-        ms.register(this);
     }
 
     private static SessionFactory createSessionFactory(Configuration configuration) {
@@ -62,6 +69,16 @@ public class DbServiceHibernateImpl implements DbService, DBServiceMS {
         builder.applySettings(configuration.getProperties());
         ServiceRegistry serviceRegistry = builder.build();
         return configuration.buildSessionFactory(serviceRegistry);
+    }
+
+    @PostConstruct
+    public void init(){
+        if (ms != null) {
+            ms.register(this);
+        } else {
+            log.log(Level.SEVERE, "Error: ms is null");
+        }
+        sebDb();
     }
 
 
@@ -151,6 +168,41 @@ public class DbServiceHibernateImpl implements DbService, DBServiceMS {
 
     @Override
     public String getData() {
-        return "Data through MS";
+        System.out.println("!!! getData !!!");
+        System.out.println("cache.getHitCount() " + cache.getHitCount());
+        System.out.println("cache.getMissCount() " + cache.getMissCount());
+        System.out.println("cache.getLifeTime() " + cache.getLifeTime());
+        System.out.println("cache.getIdleTime() " + cache.getIdleTime());
+        System.out.println("cache.getMax() " + cache.getMax());
+        DataObject data = new DataObject(cache.getHitCount(), cache.getMissCount(), cache.getLifeTime(), cache.getIdleTime(), cache.getMax());
+        return new Gson().toJson(data);
+    }
+
+    private void sebDb() {
+        System.out.println("setDb");
+
+        String street = "Ark street";
+        AddressDataSet address = new AddressDataSet(street);
+        UserDataSet user = new UserDataSet("Jones", 27, address, null);
+        List<PhoneDataSet> phones = Arrays.asList(new PhoneDataSet("110-12-23", user), new PhoneDataSet("113-23-34", user));
+        user.setPhones(phones);
+        save(user);
+        UserDataSet userRead1 = load(1, UserDataSet.class);
+        if (userRead1 == null) {
+            System.out.println("Error! userRead1 is null");
+        }
+        UserDataSet userRead2 = load(1, UserDataSet.class);
+        if (userRead2 == null) {
+            System.out.println("Error! userRead2 is null");
+        }
+        try {
+            Thread.sleep(1400);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        UserDataSet userRead3 = load(1, UserDataSet.class);
+        if (userRead3 == null) {
+            System.out.println("Error! userRead3 is null");
+        }
     }
 }
